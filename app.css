@@ -1,0 +1,269 @@
+body{
+  text-align:center;
+  font-family: 'Alfa Slab One', cursive;
+  background-image: url("MinecraftMesa.jpg");
+  background-size:1200px;
+  background-attachment: fixed;
+
+}
+/*------------------------------Barra Lateral-----------------------------------*/
+      .container::-webkit-scrollbar {
+        width: 10px;     /* Tamaño del scroll en vertical */
+        height: 0px;    /* Tamaño del scroll en horizontal */
+      }
+
+      .container::-webkit-scrollbar-thumb {
+        background: #FFFFFF;  /*Blanco*/
+        border-radius: 6px;
+      }
+
+      /* Cambiamos el fondo y agregamos una sombra cuando esté en hover */
+      .container::-webkit-scrollbar-thumb:hover {
+          background: #EA00D0;  /*Violeta*/
+      }
+
+      /* Cambiamos el fondo cuando esté en active */
+      .container::-webkit-scrollbar-thumb:active {
+          background-color: #5DC1B9; /*Turquesa*/
+      }
+
+      /* Ponemos un color de fondo y redondeamos las esquinas del track */
+      .container::-webkit-scrollbar-track {
+          background: #000000; /*Negro*/
+          border-radius: 0px;
+      }
+
+      /* Cambiamos el fondo cuando esté en active o hover */
+      .container::-webkit-scrollbar-track:hover,
+      .container::-webkit-scrollbar-track:active {
+        background: #000000; /*Negro*/
+      }
+
+/*------------------------------Titulos y parrafos-----------------------------------*/
+
+    .TPrincipal{
+      text-shadow: 1px 1px black, 1px -1px black, -1px -1px black, -1px 1px black;
+      font-family: 'Otomanopee One', sans-serif;
+    }
+
+    .TSecundario{
+      text-shadow: 1px 1px black, 1px -1px black, -1px -6px black, -1px 1px black;
+    }
+
+    .copy{
+      text-shadow: 1px 1px black, 1px -1px black, -1px -1px black, -1px 1px black;
+    }
+
+/*------------------------------Secciones-----------------------------------*/
+
+
+    .SeparacionArriba{
+      text-shadow: 1px 1px black, 1px -1px black, -1px -1px black, -1px 1px black;
+      width:350px;
+      height:10px;
+      padding:200px;
+      text-align:center;
+    }
+
+    .Separaciones{
+      text-shadow: 1px 1px black, 1px -1px black, -1px -1px black, -1px 1px black;
+      width:350px;
+      height:10px;
+      padding:200px;
+      margin:auto;
+      text-align:center;
+    }
+
+
+  .Enchants {
+    text-shadow: 1px 1px black, 1px -1px black, -1px -1px black, -1px 1px black;
+    box-shadow: 0px 0px 50px 1px violet;
+    width:350px;
+    height:250px;
+    padding:200px;
+    margin:auto;
+    text-align:center;
+    /*background-image: linear-gradient(to top, #30cfd0 0%, #330867 50%);*/
+    border-radius:4em;
+    backdrop-filter: blur(5px);
+    }
+/*------------------------------Items de las secciones-----------------------------------*/
+    .Casco {
+      position: absolute;
+      top: 120px;
+      left: 220px;
+      width:300px;
+      height:300px;
+    }
+    .subtituloA{
+      position: absolute;
+      top: 5px;
+      left: 340px;
+    }
+
+    .Pechera{
+      position: absolute;
+      top: 100px;
+      left: 220px;
+      width:300px;
+      height:300px;
+    }
+    .subtituloB{
+      position: absolute;
+      top: 10px;
+      left: 340px;
+    }
+
+    .Pantalones{
+      position: absolute;
+      top: 100px;
+      left: 220px;
+      width:300px;
+      height:300px;
+    }
+    .subtituloC{
+      position: absolute;
+      top: 1px;
+      left: 320px;
+    }
+
+    .Botas{
+      position: absolute;
+      top: 140px;
+      left: 270px;
+      width:220px;
+      height:220px;
+    }
+    .subtituloD{
+      position: absolute;
+      top: 5px;
+      left: 345px;
+    }
+
+    .Espada{
+      position: absolute;
+      top: 150px;
+      left: 270px;
+      width:220px;
+      height:220px;
+    }
+    .subtituloE{
+      position: absolute;
+      top: 5px;
+      left: 340px;
+    }
+
+    .Pico{
+      position: absolute;
+      top: 140px;
+      left: 270px;
+      width:220px;
+      height:220px;
+    }
+    .subtituloF{
+      position: absolute;
+      top: 5px;
+      left: 350px;
+    }
+
+    .Hacha{
+      position: absolute;
+      top: 140px;
+      left: 270px;
+      width:220px;
+      height:220px;
+    }
+    .subtituloG{
+      position: absolute;
+      top: 5px;
+      left: 340px;
+    }
+
+    .Arco{
+      position: absolute;
+      top: 140px;
+      left: 270px;
+      width:220px;
+      height:220px;
+    }
+    .subtituloH{
+      position: absolute;
+      top: 5px;
+      left: 350px;
+    }
+
+    .Ballesta{
+      position: absolute;
+      top: 120px;
+      left: 260px;
+      width:220px;
+      height:220px;
+    }
+    .subtituloI{
+      position: absolute;
+      top: 1px;
+      left: 330px;
+    }
+/*
+    .Tridente{
+      position: absolute;
+      top: 6220px;
+      left: 460px;
+    }
+    .subtituloJ{
+      position: absolute;
+      top: 6110px;
+      left: 560px;
+    }
+
+    .Caña{
+      position: absolute;
+      top: 6850px;
+      left: 440px;
+    }
+    .subtituloK{
+      position: absolute;
+      top: 6750px;
+      left: 570px;
+    }
+    */
+/*------------------------------Botón "Ver"-----------------------------------*/
+
+    a {
+      text-decoration:none;
+      color:#FFF;
+    }
+
+    .rainbow-button {
+      width:calc(20vw + 6px);
+      height:calc(8vw + 6px);
+      /*background-image: linear-gradient(90deg, #00C0FF 0%, #FFCF00 49%, #FC4F4F 80%, #00C0FF 100%);*/ /*Multicolor en el botón*/
+      background-image: linear-gradient(90deg, #72afd3 0%, #fa71cd 100%);
+      border-radius:5px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-transform:uppercase;
+      font-size:3vw;
+      font-weight:bold;
+    }
+
+    .rainbow-button:after {
+      content:attr(alt);
+      width:20vw;
+      height:8vw;
+      background-color:#191919;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .rainbow-button:hover {
+      animation:slidebg 1s linear infinite;
+    }
+
+    @keyframes slidebg {
+      to {
+        background-position:20vw;
+      }
+    }
