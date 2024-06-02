@@ -1,7 +1,7 @@
 body{
   text-align:center;
   font-family: 'Alfa Slab One', cursive;
-  background-image: url("MinecraftMesa.jpg");
+  background-image: url("bkg/MinecraftMesa.jpg");
   background-size:1200px;
   background-attachment: fixed;
 
@@ -79,7 +79,7 @@ body{
     text-shadow: 1px 1px black, 1px -1px black, -1px -1px black, -1px 1px black;
     box-shadow: 0px 0px 50px 1px violet;
     width:350px;
-    height:250px;
+    height:200px;
     padding:200px;
     margin:auto;
     text-align:center;
@@ -266,4 +266,26 @@ body{
       to {
         background-position:20vw;
       }
+    }
+
+/*------------------------------Lista de encantamientos-----------------------------------*/
+
+    .hidden {
+      display: none;
+    }
+
+    .achicar {
+      position: absolute;
+      top: 120px;
+      left: 320px;
+      width: 100px; 
+      height: 100px; 
+    }
+
+    .encantamientos-lista ul {
+      list-style-type: none; /* Eliminar los puntos de la lista */
+      margin: 0; /* Eliminar el margen por defecto */
+      position: absolute;
+      top: 230px;
+      left: 255px;
     }
