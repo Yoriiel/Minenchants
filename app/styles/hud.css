@@ -1,0 +1,148 @@
+/* ---------------- Sección 2: Marcadores + HUD ---------------- */
+
+.seccion-marcadores {
+  min-height: 100vh;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 1.5rem 12rem; /* espacio abajo para que el HUD no tape contenido */
+  background-image: url("/secciones/Movimiento2.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* =========================================================
+   HUD de inventario (estilo Minecraft), anclado cerca del
+   borde inferior de la Sección 2. Medidas proporcionales a
+   BarraHUD.png (600×125px, hotbar de 8 casillas ~62×60px).
+   ========================================================= */
+
+.hud {
+  position: absolute;
+  bottom: 3%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(92%, 620px);
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.hud-barras {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.hud-fila-iconos {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: clamp(0.9rem, 2vw, 1.3rem);
+  line-height: 1;
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.8));
+
+  /* Con esto bloqueas la selección de todo: corazones, muslos y número */
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.hud-grupo-izquierda,
+.hud-grupo-derecha {
+  display: flex;
+  align-items: center;
+  gap: 0.1rem;
+}
+
+.hud-corazon {
+  color: #e0342f;
+}
+
+.hud-muslito {
+  font-size: 0.99em;
+  display: inline-block;
+  transform: translateY(-1px);
+}
+
+.hud-xp-numero {
+  color: #7ee81c;
+  font-weight: 800;
+  margin: 0 0.6rem;
+  margin-left: 1.5rem;
+  text-shadow: 1px 1px 0 #000, -1px -1px 0 #000;
+}
+
+.hud-barra-xp {
+  height: 6px;
+  background: #1a1a1a;
+  border: 1px solid #000;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.hud-barra-xp-relleno {
+  width: 55%;
+  height: 100%;
+  background: linear-gradient(180deg, #8be23c, #5bb824);
+}
+
+.hud-hotbar {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  gap: 2px; /* Reducimos un poco la separación para imitar la imagen */
+  background: rgba(139, 139, 139, 0.95); /* Gris clásico de la UI (#8b8b8b) */
+  border: 2px solid #000; /* Borde negro exterior */
+  border-radius: 0; /* Quitamos bordes redondeados para que sea 100% estilo bloque */
+  padding: 4px;
+}
+
+.hud-casilla {
+  aspect-ratio: 1 / 1;
+  background: #3b3b3b; /* Gris oscuro del interior del hueco */
+
+  /* --- EFECTO 3D MINECRAFT --- */
+  border-top: 2px solid #1a1a1a; /* Sombra oscura arriba */
+  border-left: 2px solid #1a1a1a; /* Sombra oscura izquierda */
+  border-bottom: 2px solid #ffffff; /* Brillo blanco abajo */
+  border-right: 2px solid #ffffff; /* Brillo blanco derecha */
+  /* --------------------------- */
+
+  border-radius: 0; /* Quitamos bordes redondeados */
+  padding: 4px;
+  cursor: pointer;
+  transition: transform 0.1s ease, background-color 0.1s ease;
+}
+
+.hud-casilla:disabled {
+  cursor: default;
+  opacity: 0.5; /* Mantiene la transparencia si la casilla está vacía */
+}
+
+.hud-casilla img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  image-rendering: pixelated;
+  pointer-events: none;
+}
+
+/* Selección: Contorno blanco uniforme al pasar el mouse */
+.hud-casilla:not(:disabled):hover,
+.hud-casilla:not(:disabled):focus-visible {
+  border: 2px solid #ffffff; /* Sobrescribe el 3D y hace todo el borde blanco */
+  background: #474747; /* Se ilumina ligeramente el fondo */
+  transform: scale(1.05);
+  outline: none;
+}
+
+@media (max-width: 480px) {
+  .hud {
+    bottom: 1.5%;
+  }
+  .hud-fila-iconos {
+    font-size: 0.75rem;
+  }
+}

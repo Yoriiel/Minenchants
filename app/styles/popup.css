@@ -1,0 +1,149 @@
+/* =========================================================
+   Popup: mesa de encantamientos (Popup-mesa.png, 514×485px).
+
+   TODO acá adentro está en píxeles que coinciden 1:1 con la imagen
+   original (514×485) — si abrís Popup-mesa.png en cualquier editor
+   y pasás el mouse sobre una casilla, esas coordenadas son las que
+   escribís directo en `left`/`top` de cada bloque de abajo.
+
+   El tamaño final en pantalla lo controla `--popup-escala` (un
+   transform: scale() sobre TODO el popup), así que podés cambiar
+   solo ese número para agrandar/achicar todo sin recalcular nada.
+   ========================================================= */
+
+.popup-fondo {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(5, 3, 10, 0.75);
+  backdrop-filter: blur(3px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.popup-ventana {
+  /* ---- Variables para ir jugando con los números ---- */
+  --popup-escala: 1.3; /* tamaño final del popup completo */
+  --popup-casilla-tam: 46px; /* ancho/alto de CADA casilla */
+  --popup-gap-col: 4.7px; /* separación horizontal entre casillas */
+  --popup-gap-fila: 4.1px; /* separación vertical entre casillas */
+
+  position: relative;
+  width: 514px;
+  height: 485px;
+  background-image: url("/img/Popup-mesa.png");
+  background-size: 100% 100%;
+  image-rendering: pixelated;
+  transform: scale(var(--popup-escala));
+}
+
+/* ---- Apariencia compartida de TODAS las casillas: fondo
+   transparente + contorno gris delgado ---- */
+.popup-casilla-principal,
+.popup-casilla {
+  background: transparent;
+  border: none; /* Quitamos el contorno guía */
+  box-sizing: border-box;
+}
+
+.popup-casilla-principal img,
+.popup-casilla img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  image-rendering: pixelated;
+}
+
+/* Casilla principal, bajo el libro.
+   MOVERLA: cambiá `left` / `top` (en px, escala 1:1 con la imagen). */
+.popup-casilla-principal {
+  position: absolute;
+  left: 80px;
+  top: 140px;
+  width: var(--popup-casilla-tam);
+  height: var(--popup-casilla-tam);
+}
+
+.popup-item {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  image-rendering: pixelated;
+  cursor: grab;
+  /* En reposo, un poco más chico que la casilla para que no quede
+     "apretado" — ver nota de tamaño en Parte 3 más abajo. */
+  transform: scale(0.88);
+  transition: transform 0.12s ease;
+  touch-action: none; /* evita que el navegador scrollee al arrastrar en touch */
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.popup-item:active {
+  cursor: grabbing;
+}
+
+/* El original se oculta mientras su "fantasma" lo sigue arrastrando */
+.popup-item-oculto {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* El ícono que sigue al cursor/dedo durante el arrastre */
+.popup-item-fantasma {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 200;
+  width: var(--popup-casilla-tam, 46px);
+  height: var(--popup-casilla-tam, 46px);
+  pointer-events: none;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.5));
+}
+
+/* Grid principal: 3 filas × 9 columnas = 27 casillas.
+   MOVER TODO EL BLOQUE: cambiá `left` / `top` (esquina superior
+   izquierda de la primera casilla).
+   SEPARACIÓN: `--popup-gap-col` (entre columnas) y `--popup-gap-fila`
+   (entre filas) en .popup-ventana, arriba.
+   TAMAÑO DE CASILLA: `--popup-casilla-tam` en .popup-ventana. */
+.popup-inventario-principal {
+  position: absolute;
+  left: 33px;
+  top: 247px;
+  display: grid;
+  grid-template-columns: repeat(9, var(--popup-casilla-tam));
+  grid-template-rows: repeat(3, var(--popup-casilla-tam));
+  column-gap: var(--popup-gap-col);
+  row-gap: var(--popup-gap-fila);
+}
+
+/* Fila separada de abajo: 9 casillas (mismo ancho/alto de casilla
+   y mismo gap-col que el grid principal, para que quede alineada).
+   MOVERLA: cambiá `left` / `top`. */
+.popup-inventario-hotbar {
+  position: absolute;
+  left: 33px;
+  top: 411px;
+  display: grid;
+  grid-template-columns: repeat(9, var(--popup-casilla-tam));
+  column-gap: var(--popup-gap-col);
+}
+
+.popup-casilla {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 480px) {
+  .popup-fondo {
+    padding: 1rem;
+  }
+  .popup-ventana {
+    --popup-escala: 0.85;
+  }
+}

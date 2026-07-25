@@ -1,0 +1,65 @@
+/* =========================================================
+   BASE · variables globales, reset y comportamiento de scroll
+   ========================================================= */
+
+:root {
+  --color-texto: #f5f1ea;
+  --color-texto-suave: #cfc7db;
+  --color-acento: #b455f2;
+  --color-acento-gold: #f2c14e;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Segoe UI", system-ui, sans-serif;
+  background: #0b0710;
+  color: var(--color-texto);
+  scroll-behavior: smooth;
+}
+
+/* =========================================================
+   Snap de secciones: ya solo son 2 (Hero y Marcadores), sin
+   ninguna sección pinneada peleando por el control del scroll —
+   por eso vuelve a ser CSS puro, sin nada de JS involucrado.
+   ========================================================= */
+html {
+  scroll-snap-type: y mandatory;
+}
+
+.seccion-hero,
+.seccion-marcadores {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
+/* Partículas: fixed a nivel de página, cubre ambas secciones sin
+   importar el scroll. pointer-events:none para no bloquear clics. */
+.canvas-particulas {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 50;
+}
+
+.seccion {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* ---------------- Accesibilidad ---------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  html,
+  body {
+    scroll-behavior: auto;
+  }
+}

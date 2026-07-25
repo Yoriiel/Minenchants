@@ -1,0 +1,76 @@
+/* ---------------- Sección 1: Hero ---------------- */
+
+.seccion-hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: flex-start; /* Manda el contenedor arriba */
+  justify-content: center;
+  text-align: center;
+  background-image: url("/secciones/Hero.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  /* Puedes usar este padding para bajar o subir TODO el bloque de golpe */
+  padding-top: 15vh;
+}
+
+.hero-contenido {
+  max-width: 700px; /* Lo hice un poco más ancho para que la imagen luzca bien */
+  width: 100%;
+  padding: 0 1.5rem;
+}
+
+/* Este contenedor une al logo y al texto amarillo */
+.contenedor-logo {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+
+  /* Moví tu translateY aquí para que el texto y el logo suban/bajen JUNTOS */
+  transform: translateY(-85px);
+}
+
+.hero-logo {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+/* =========================================================
+   TEXTO AMARILLO (SPLASH TEXT)
+   ========================================================= */
+.texto-splash {
+  position: absolute;
+  font-family: "Segoe UI", system-ui, sans-serif; /* Cambia a tu fuente pixelada si tienes una */
+  color: #ffff00; /* Amarillo Minecraft */
+  text-shadow: 2px 2px 0px #3f3f00; /* Sombra oscura típica del juego */
+  font-weight: 900;
+  white-space: nowrap;
+  z-index: 10;
+  pointer-events: none; /* Para que no estorbe si pasas el ratón */
+
+  /* 👇 AQUÍ CONTROLAS LA POSICIÓN (X / Y) 👇 */
+  top: 50%; /* Ajusta este valor para subir/bajar el texto sobre el logo */
+  right: -15%; /* Ajusta este valor para moverlo de izquierda a derecha */
+
+  /* 👇 AQUÍ CONTROLAS EL TAMAÑO DE LA LETRA 👇 */
+  font-size: 1.5rem;
+
+  /* 👇 AQUÍ CONTROLAS LA VELOCIDAD DE LA ANIMACIÓN (ej: 0.4s) 👇 */
+  animation: latido-splash 0.4s alternate infinite ease-in-out;
+}
+
+/* =========================================================
+   ANIMACIÓN DEL TEXTO (AGRANDAR/ACHICAR)
+   ========================================================= */
+@keyframes latido-splash {
+  from {
+    /* 👇 AQUÍ CONTROLAS LA INCLINACIÓN INICIAL 👇 */
+    transform: rotate(-20deg) scale(1);
+  }
+  to {
+    /* MANTÉN LA MISMA INCLINACIÓN (-20deg) Y CAMBIA EL SCALE PARA AGRANDAR */
+    transform: rotate(-20deg) scale(1.15); /* 1.15 = 15% más grande */
+  }
+}
