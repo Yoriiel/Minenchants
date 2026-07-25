@@ -6,10 +6,10 @@ import { useEffect, useRef, useState } from "react";
  * Maneja el arrastre (drag & drop) de ítems entre casillas del popup,
  * usando Pointer Events para que funcione igual con mouse y con touch.
  *
- * Necesita `popup`/`setPopup` (del hook useInventoryPopup) para saber
- * qué hay en cada casilla y poder moverlo cuando se suelta.
+ * Necesita `idEnOrigen`/`moverItem` (del hook useInventoryPopup) para
+ * saber qué hay en cada casilla y poder moverlo cuando se suelta.
  */
-export function useDragAndDrop({ popup, setPopup, idEnOrigen }) {
+export function useDragAndDrop({ idEnOrigen, moverItem }) {
   // Qué se está arrastrando ahora mismo, o null si no hay drag activo.
   const [arrastre, setArrastre] = useState(null);
   const arrastreRef = useRef(null);
@@ -83,24 +83,7 @@ export function useDragAndDrop({ popup, setPopup, idEnOrigen }) {
 
       if (destino === d.origen) return;
 
-      setPopup((prev) => {
-        if (!prev) return prev;
-        const ocupado = destino === "principal" ? prev.principal : prev.inventario[destino];
-        if (ocupado) return prev;
-
-        const siguiente = {
-          principal: prev.principal,
-          inventario: { ...prev.inventario },
-        };
-
-        if (d.origen === "principal") siguiente.principal = null;
-        else delete siguiente.inventario[d.origen];
-
-        if (destino === "principal") siguiente.principal = d.id;
-        else siguiente.inventario[destino] = d.id;
-
-        return siguiente;
-      });
+      moverItem(d.origen, destino);
     };
 
     window.addEventListener("pointermove", onPointerMove);
@@ -109,7 +92,7 @@ export function useDragAndDrop({ popup, setPopup, idEnOrigen }) {
       window.removeEventListener("pointermove", onPointerMove);
       window.removeEventListener("pointerup", onPointerUp);
     };
-  }, [arrastre, setPopup]);
+  }, [arrastre, moverItem]);
 
   return { arrastre, iniciarArrastre, fantasmaRef, ultimaPosRef };
 }

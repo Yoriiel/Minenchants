@@ -85,11 +85,23 @@
   cursor: grabbing;
 }
 
-/* El original se oculta mientras su "fantasma" lo sigue arrastrando */
+/* Feedback de "esto se puede agarrar": al pasar el mouse, el ítem
+   crece levemente usando la transición ya definida arriba (0.12s).
+   Es solo CSS :hover, así que no interfiere en nada con el arrastre
+   en sí (ese sigue moviéndose sin easing, 1:1 con el cursor/dedo). */
+.popup-casilla:hover .popup-item,
+.popup-casilla-principal:hover .popup-item {
+  transform: scale(1);
+}
+
+/* Mientras se arrastra un ítem, no queremos que el hover de la
+   casilla de origen (que quedó "vacía" visualmente) reaccione. */
 .popup-item-oculto {
   opacity: 0;
   pointer-events: none;
+  transform: scale(0.88) !important;
 }
+
 
 /* El ícono que sigue al cursor/dedo durante el arrastre */
 .popup-item-fantasma {

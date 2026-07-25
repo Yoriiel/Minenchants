@@ -12,7 +12,7 @@ export default function Hero() {
         </div>
 
         <div className="menu-minecraft">
-          <button className="btn-mc btn-largo">Encantar</button>
+          <a href="#seccion-marcadores" className="btn-mc btn-largo">Encantar!</a>
           <button className="btn-mc btn-largo">Multiplayer</button>
           <button className="btn-mc btn-largo">Minecraft Realms</button>
 

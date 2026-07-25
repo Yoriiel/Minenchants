@@ -42,7 +42,7 @@
    ========================================================= */
 .texto-splash {
   position: absolute;
-  font-family: "Segoe UI", system-ui, sans-serif; /* Cambia a tu fuente pixelada si tienes una */
+  font-family: var(--fuente-mojangles); /* Fuente Mojangles descargada en /fonts */
   color: #ffff00; /* Amarillo Minecraft */
   text-shadow: 2px 2px 0px #3f3f00; /* Sombra oscura típica del juego */
   font-weight: 900;
@@ -52,10 +52,10 @@
 
   /* 👇 AQUÍ CONTROLAS LA POSICIÓN (X / Y) 👇 */
   top: 50%; /* Ajusta este valor para subir/bajar el texto sobre el logo */
-  right: -15%; /* Ajusta este valor para moverlo de izquierda a derecha */
+  right: -28%; /* Ajusta este valor para moverlo de izquierda a derecha */
 
   /* 👇 AQUÍ CONTROLAS EL TAMAÑO DE LA LETRA 👇 */
-  font-size: 1.5rem;
+  font-size: 1.0rem;
 
   /* 👇 AQUÍ CONTROLAS LA VELOCIDAD DE LA ANIMACIÓN (ej: 0.4s) 👇 */
   animation: latido-splash 0.4s alternate infinite ease-in-out;

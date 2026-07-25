@@ -22,13 +22,12 @@ const PARTICULAS_NORMAL = 40;
 export default function Home() {
   const particulasApiRef = useRef(null);
 
-  const { popup, setPopup, abrirPopup, cerrarPopup, idEnOrigen } =
+  const { popup, abrirPopup, cerrarPopup, idEnOrigen, moverItem } =
     useInventoryPopup(ITEMS);
 
   const { arrastre, iniciarArrastre, fantasmaRef, ultimaPosRef } = useDragAndDrop({
-    popup,
-    setPopup,
     idEnOrigen,
+    moverItem,
   });
 
   return (

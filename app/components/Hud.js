@@ -4,7 +4,7 @@
  */
 export default function Hud({ items, casillasHotbar, onSelectItem }) {
   return (
-    <section className="seccion seccion-marcadores">
+    <section id="seccion-marcadores" className="seccion seccion-marcadores">
       <div className="hud" aria-label="Inventario de equipamiento">
         <div className="hud-barras">
           <div className="hud-fila-iconos">

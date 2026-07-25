@@ -24,6 +24,7 @@
 
   /* Texto */
   color: #ffffff;
+  text-decoration: none; /* por si .btn-mc se usa en un <a>, como "Encantar" */
   font-family: "Segoe UI", system-ui, sans-serif; /* Puedes cambiarla por una pixelada */
   font-size: 1.1rem;
   font-weight: bold;
