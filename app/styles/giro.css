@@ -1,0 +1,55 @@
+/* =========================================================
+   Aviso "girá tu teléfono": tapa el popup en celulares en
+   vertical, porque la mesa de encantamientos es muy ancha para
+   ese modo. z-index por encima del popup (100) y del fantasma
+   de arrastre (200).
+   ========================================================= */
+
+.giro-fondo {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  background: rgba(5, 3, 10, 0.92);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  padding: 2rem;
+  text-align: center;
+}
+
+.giro-icono {
+  width: 72px;
+  height: 72px;
+  animation: giro-rotar 1.6s ease-in-out infinite;
+}
+
+@keyframes giro-rotar {
+  0%,
+  15% {
+    transform: rotate(0deg);
+  }
+  50%,
+  65% {
+    transform: rotate(-90deg);
+  }
+  100% {
+    transform: rotate(-90deg);
+  }
+}
+
+.giro-texto {
+  color: #ffffff;
+  font-family: var(--fuente-mojangles);
+  font-size: clamp(0.85rem, 4vw, 1.1rem);
+  max-width: 26ch;
+  text-shadow: 2px 2px 0 #000000;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .giro-icono {
+    animation: none;
+    transform: rotate(-90deg); /* pista estática, sin loop */
+  }
+}

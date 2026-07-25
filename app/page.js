@@ -9,10 +9,12 @@ import Hero from "./components/Hero";
 import Hud from "./components/Hud";
 import InventoryPopup from "./components/InventoryPopup";
 import DragGhost from "./components/DragGhost";
+import GiroDispositivo from "./components/GiroDispositivo";
 
 import { ITEMS, ITEMS_POR_ID } from "./data/items";
 import { useInventoryPopup } from "./hooks/useInventoryPopup";
 import { useDragAndDrop } from "./hooks/useDragAndDrop";
+import { useOrientacionMovil } from "./hooks/useOrientacionMovil";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -29,6 +31,8 @@ export default function Home() {
     idEnOrigen,
     moverItem,
   });
+
+  const necesitaGirar = useOrientacionMovil();
 
   return (
     <>
@@ -60,6 +64,8 @@ export default function Home() {
           posicionInicial={ultimaPosRef.current}
         />
       )}
+
+      {popup && necesitaGirar && <GiroDispositivo />}
     </>
   );
 }
