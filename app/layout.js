@@ -14,6 +14,19 @@ export default function RootLayout({ children }) {
   return (
     <html className="container" lang="es" dir="ltr">
       <head>
+        {/* Al recargar, algunos navegadores restauran el scroll donde
+            estabas antes. Esto fuerza que SIEMPRE se empiece arriba,
+            en el Header. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              if ("scrollRestoration" in window.history) {
+                window.history.scrollRestoration = "manual";
+              }
+              window.scrollTo(0, 0);
+            `,
+          }}
+        />
         <link
           href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css"
           rel="stylesheet"

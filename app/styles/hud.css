@@ -141,6 +141,7 @@
 @media (max-width: 480px) {
   .hud {
     bottom: 1.5%;
+    width: min(85%, 480px); /* 👈 AQUÍ: un poquito más chico que el 92%/620px de escritorio (achique leve, a propósito) */
   }
   .hud-fila-iconos {
     font-size: 0.75rem;

@@ -52,10 +52,10 @@
 
   /* 👇 AQUÍ CONTROLAS LA POSICIÓN (X / Y) 👇 */
   top: 50%; /* Ajusta este valor para subir/bajar el texto sobre el logo */
-  right: -28%; /* Ajusta este valor para moverlo de izquierda a derecha */
+  right: -15%; /* Ajusta este valor para moverlo de izquierda a derecha */
 
   /* 👇 AQUÍ CONTROLAS EL TAMAÑO DE LA LETRA 👇 */
-  font-size: 1.0rem;
+  font-size: 1.5rem;
 
   /* 👇 AQUÍ CONTROLAS LA VELOCIDAD DE LA ANIMACIÓN (ej: 0.4s) 👇 */
   animation: latido-splash 0.4s alternate infinite ease-in-out;
@@ -72,5 +72,28 @@
   to {
     /* MANTÉN LA MISMA INCLINACIÓN (-20deg) Y CAMBIA EL SCALE PARA AGRANDAR */
     transform: rotate(-20deg) scale(1.15); /* 1.15 = 15% más grande */
+  }
+}
+
+/* =========================================================
+   VERSIÓN MÓVIL: todo el Header (logo + splash amarillo) se
+   achica a escala para que quede prolijo. Los botones se achican
+   aparte, en buttons.css.
+   ========================================================= */
+@media (max-width: 480px) {
+  .seccion-hero {
+    padding-top: 6vh; /* 👈 AQUÍ: menos aire arriba del logo en celulares (antes 15vh) */
+  }
+
+  .hero-contenido {
+    max-width: min(340px, 88vw); /* 👈 AQUÍ: ancho del bloque logo+splash+botones en celulares */
+  }
+
+  .contenedor-logo {
+    transform: translateY(-40px); /* 👈 AQUÍ: el logo mobile es más chico, necesita menos "empuje" hacia arriba que los -85px de escritorio */
+  }
+
+  .texto-splash {
+    font-size: 0.85rem; /* 👈 AQUÍ: tamaño de "Estos son los Mejores!" en celulares (antes 1.5rem) */
   }
 }

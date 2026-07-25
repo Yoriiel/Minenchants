@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -17,14 +17,27 @@ import { useInventoryPopup } from "./hooks/useInventoryPopup";
 import { useDragAndDrop } from "./hooks/useDragAndDrop";
 import { useOrientacionMovil } from "./hooks/useOrientacionMovil";
 import { useMoverPorToque } from "./hooks/useMoverPorToque";
+import { useEsMovil } from "./hooks/useEsMovil";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const CASILLAS_HOTBAR = 8;
 const PARTICULAS_NORMAL = 40;
 
+// Ancho máximo (px) considerado "móvil" para apagar las partículas
+// del todo. AJUSTAR ACÁ si querés correr ese límite.
+const ANCHO_MOVIL_PARTICULAS = 768;
+
+// Cuántos pasos da la reaparición gradual de partículas al cerrar el
+// popup, y cuánto se espera entre paso y paso: más pasos/ms = más
+// lenta y suave. AJUSTAR ACÁ la velocidad del "desvanecimiento
+// inverso".
+const PASOS_REAPARICION_PARTICULAS = 15;
+const MS_ENTRE_PASOS_REAPARICION = 40;
+
 export default function Home() {
   const particulasApiRef = useRef(null);
+  const popupEstabaAbiertoRef = useRef(false);
 
   const { popup, abrirPopup, cerrarPopup, idEnOrigen, moverItem } =
     useInventoryPopup(ITEMS);
@@ -43,13 +56,58 @@ export default function Home() {
 
   const necesitaGirar = useOrientacionMovil();
 
+  // Ancho de pantalla "móvil" (independiente de la orientación): ahí
+  // no montamos <Particles /> para nada, ni siquiera apagadas.
+  const esMovil = useEsMovil(ANCHO_MOVIL_PARTICULAS);
+
+  // Al abrir el popup (en PC, donde SÍ hay partículas montadas): las
+  // apagamos de una para no gastar CPU mientras se usa la mesa de
+  // encantamientos. Al cerrarlo: no las prendemos todas de golpe,
+  // las vamos trayendo de a poco (efecto contrario a un fundido).
+  useEffect(() => {
+    const api = particulasApiRef.current;
+    if (!api) return; // no hay partículas montadas (estamos en móvil)
+
+    const abierto = Boolean(popup);
+    const estabaAbierto = popupEstabaAbiertoRef.current;
+    popupEstabaAbiertoRef.current = abierto;
+    if (abierto === estabaAbierto) return; // sin cambio real
+
+    let cancelado = false;
+    let idIntervalo = null;
+
+    if (abierto) {
+      api.setCantidad(0);
+    } else {
+      let actual = 0;
+      const paso = Math.max(1, Math.ceil(PARTICULAS_NORMAL / PASOS_REAPARICION_PARTICULAS));
+      idIntervalo = window.setInterval(() => {
+        if (cancelado) return;
+        actual += paso;
+        if (actual >= PARTICULAS_NORMAL) {
+          api.setCantidad(PARTICULAS_NORMAL);
+          clearInterval(idIntervalo);
+        } else {
+          api.setCantidad(actual);
+        }
+      }, MS_ENTRE_PASOS_REAPARICION);
+    }
+
+    return () => {
+      cancelado = true;
+      if (idIntervalo) clearInterval(idIntervalo);
+    };
+  }, [popup]);
+
   return (
     <>
-      <Particles
-        ref={particulasApiRef}
-        className="canvas-particulas"
-        cantidadBase={PARTICULAS_NORMAL}
-      />
+      {esMovil === false && (
+        <Particles
+          ref={particulasApiRef}
+          className="canvas-particulas"
+          cantidadBase={PARTICULAS_NORMAL}
+        />
+      )}
 
       <Hero />
 

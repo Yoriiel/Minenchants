@@ -81,3 +81,30 @@
   justify-content: center;
   padding: 0; /* Sobrescribimos el padding para centrar el icono */
 }
+
+/* =========================================================
+   VERSIÓN MÓVIL: todos los botones achicados a escala (mismo
+   diseño, todo un poco más chico y compacto).
+   ========================================================= */
+@media (max-width: 480px) {
+  .menu-minecraft {
+    max-width: min(300px, 78vw); /* 👈 AQUÍ: ancho del menú de botones en celulares (antes 510px) */
+    gap: 10px; /* 👈 AQUÍ: separación vertical entre botones (antes 15px) */
+    margin-top: -55px; /* sigue al translateY del logo mobile en hero.css */
+  }
+
+  .btn-mc {
+    font-size: 0.8rem; /* 👈 AQUÍ: tamaño de letra de los botones (antes 1.1rem) */
+    padding: 7px 0; /* 👈 AQUÍ: alto de los botones largos (antes 10px 0) */
+  }
+
+  .btn-cuadrado {
+    width: 34px; /* 👈 AQUÍ: tamaño de los botones cuadrados (antes 46px) */
+    font-size: 1rem;
+  }
+
+  .fila-botones-inferior {
+    margin-top: 18px; /* 👈 AQUÍ: separación antes de la fila de abajo (antes 30px) */
+    gap: 8px;
+  }
+}
