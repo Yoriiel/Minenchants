@@ -1,0 +1,15 @@
+/* =========================================================
+   TIPOGRAFÍA "MOJANGLES"
+   ========================================================= */
+
+@font-face {
+  font-family: "Mojangles";
+  src:
+    url("/fonts/Mojangles.woff2") format("woff2"),
+    url("/fonts/Mojangles.ttf") format("truetype");
+  font-display: swap;
+}
+
+:root {
+  --fuente-mojangles: "Mojangles", "Press Start 2P", "Courier New", monospace;
+}

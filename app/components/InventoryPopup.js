@@ -1,8 +1,10 @@
 import InventorySlot from "./InventorySlot";
+import EnchantmentPanel from "./EnchantmentPanel";
 
 /**
  * Popup modal de la mesa de encantamientos: casilla principal (bajo
- * el libro) + grid de 27 casillas + fila de hotbar de 9 casillas.
+ * el libro) + panel de encantamientos a la derecha + grid de 27
+ * casillas + fila de hotbar de 9 casillas.
  */
 export default function InventoryPopup({
   popup,
@@ -12,6 +14,12 @@ export default function InventoryPopup({
   iniciarArrastre,
   onClose,
 }) {
+  // El panel de encantamientos siempre refleja lo que hay AHORA en la
+  // casilla principal, así que se recalcula en cada render del popup
+  // (por ejemplo, al soltar/sacar un ítem de esa casilla).
+  const idPrincipal = idEnOrigen("principal");
+  const itemPrincipal = idPrincipal ? itemsPorId[idPrincipal] : null;
+
   const renderCasilla = (origen, esPrincipal = false) => {
     const id = idEnOrigen(origen);
     const item = id ? itemsPorId[id] : null;
@@ -38,6 +46,7 @@ export default function InventoryPopup({
         aria-modal="true"
       >
         {renderCasilla("principal", true)}
+        <EnchantmentPanel item={itemPrincipal} />
 
         <div className="popup-inventario-principal">
           {Array.from({ length: 27 }, (_, i) => renderCasilla(i))}

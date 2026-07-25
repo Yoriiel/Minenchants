@@ -1,0 +1,9 @@
+Poné acá el archivo real de la fuente Mojangles para que se use
+automáticamente (ver @font-face en app/styles/fonts.css):
+
+  Mojangles.woff2   (preferido)
+  Mojangles.ttf     (alternativa)
+
+Si no agregás ningún archivo, la interfaz sigue funcionando igual:
+cae automáticamente al fallback "Press Start 2P" (ya cargada desde
+Google Fonts en app/layout.js).

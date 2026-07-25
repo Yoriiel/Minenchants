@@ -22,6 +22,13 @@ export default function RootLayout({ children }) {
           href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;700&display=swap"
           rel="stylesheet"
         />
+        {/* Fallback pixelado para "Mojangles" (ver app/styles/fonts.css):
+            si no agregás el archivo real de Mojangles en /public/fonts,
+            esta es la que termina usándose en los textos de encantamientos. */}
+        <link
+          href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
+          rel="stylesheet"
+        />
         {/* Mismos colores de texto en blanco que en el index.html original */}
         <style>{`
           img { color: #FFFFFF; }

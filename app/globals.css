@@ -5,6 +5,7 @@
    propio archivo dentro de ./styles/
    ========================================================= */
 
+@import "./styles/fonts.css";
 @import "./styles/base.css";
 @import "./styles/hero.css";
 @import "./styles/hud.css";

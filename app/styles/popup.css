@@ -139,6 +139,58 @@
   justify-content: center;
 }
 
+/* =========================================================
+   Panel de encantamientos: los 3 recuadros anchos a la derecha
+   del libro. Igual que el resto del popup, las coordenadas están
+   en píxeles 1:1 con Popup-mesa.png (514×485) — MOVER TODO EL
+   BLOQUE: cambiá `left` / `top` / `width` de .popup-encantamientos.
+   Cada recuadro individual se reparte la altura disponible por
+   igual (`flex: 1`), y separalos con `gap`.
+   ========================================================= */
+
+.popup-encantamientos {
+  position: absolute;
+  left: 180px;
+  top: 50px;
+  width: 330px;
+  height: 158px;
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  gap: 10px;
+  pointer-events: none; /* son solo texto informativo, no se interactúa */
+}
+
+.popup-encantamiento-recuadro {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 2px 12px;
+  overflow: hidden;
+}
+
+.popup-encantamiento-linea {
+  font-family: var(--fuente-mojangles);
+  font-size: clamp(0.68rem, 1.6vw, 0.85rem);
+  line-height: 1.2;
+  color: #ffff9e; /* dorado clásico de los nombres de encantamiento */
+  text-shadow: 1px 1px 0 #3f3f00;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+@media (max-width: 480px) {
+  .popup-encantamiento-linea {
+    font-size: 0.6rem;
+  }
+}
+
 @media (max-width: 480px) {
   .popup-fondo {
     padding: 1rem;
