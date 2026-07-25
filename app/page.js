@@ -10,11 +10,13 @@ import Hud from "./components/Hud";
 import InventoryPopup from "./components/InventoryPopup";
 import DragGhost from "./components/DragGhost";
 import GiroDispositivo from "./components/GiroDispositivo";
+import VueloItem from "./components/VueloItem";
 
 import { ITEMS, ITEMS_POR_ID } from "./data/items";
 import { useInventoryPopup } from "./hooks/useInventoryPopup";
 import { useDragAndDrop } from "./hooks/useDragAndDrop";
 import { useOrientacionMovil } from "./hooks/useOrientacionMovil";
+import { useMoverPorToque } from "./hooks/useMoverPorToque";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -27,9 +29,16 @@ export default function Home() {
   const { popup, abrirPopup, cerrarPopup, idEnOrigen, moverItem } =
     useInventoryPopup(ITEMS);
 
+  const { seleccionado, vuelos, ocultosVuelo, alTocarCasilla } = useMoverPorToque({
+    idEnOrigen,
+    moverItem,
+    popupAbierto: Boolean(popup),
+  });
+
   const { arrastre, iniciarArrastre, fantasmaRef, ultimaPosRef } = useDragAndDrop({
     idEnOrigen,
     moverItem,
+    onTap: alTocarCasilla,
   });
 
   const necesitaGirar = useOrientacionMovil();
@@ -53,6 +62,8 @@ export default function Home() {
           idEnOrigen={idEnOrigen}
           arrastre={arrastre}
           iniciarArrastre={iniciarArrastre}
+          ocultosVuelo={ocultosVuelo}
+          seleccionado={seleccionado}
           onClose={cerrarPopup}
         />
       )}
@@ -65,7 +76,11 @@ export default function Home() {
         />
       )}
 
-      {popup && necesitaGirar && <GiroDispositivo />}
+      {vuelos.map((v) => (
+        <VueloItem key={v.key} item={ITEMS_POR_ID[v.id]} from={v.from} to={v.to} />
+      ))}
+
+      {necesitaGirar && <GiroDispositivo />}
     </>
   );
 }

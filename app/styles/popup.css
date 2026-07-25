@@ -120,6 +120,36 @@
   filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.5));
 }
 
+/* El ícono que "vuela" de una casilla a otra cuando se mueve por
+   toque (sin arrastrar). Va un poco por encima del fantasma de
+   arrastre porque a veces hay dos volando a la vez (intercambio). */
+.popup-item-vuelo {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 210;
+  width: var(--popup-casilla-tam, 46px);
+  height: var(--popup-casilla-tam, 46px);
+  pointer-events: none;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.5));
+  transition: transform 0.22s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .popup-item-vuelo {
+    transition: none;
+  }
+}
+
+/* Ítem elegido con un toque, esperando el segundo toque (destino). */
+.popup-item-seleccionado {
+  outline: 2px solid #ffff55;
+  outline-offset: 1px;
+  border-radius: 2px;
+  filter: drop-shadow(0 0 4px rgba(255, 255, 85, 0.9));
+}
+
 /* Grid principal: 3 filas × 9 columnas = 27 casillas.
    MOVER TODO EL BLOQUE: cambiá `left` / `top` (esquina superior
    izquierda de la primera casilla).

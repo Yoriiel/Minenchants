@@ -12,6 +12,8 @@ export default function InventoryPopup({
   idEnOrigen,
   arrastre,
   iniciarArrastre,
+  ocultosVuelo,
+  seleccionado,
   onClose,
 }) {
   // El panel de encantamientos siempre refleja lo que hay AHORA en la
@@ -23,7 +25,7 @@ export default function InventoryPopup({
   const renderCasilla = (origen, esPrincipal = false) => {
     const id = idEnOrigen(origen);
     const item = id ? itemsPorId[id] : null;
-    const seEstaArrastrando = arrastre?.origen === origen;
+    const oculto = arrastre?.origen === origen || ocultosVuelo.has(origen);
 
     return (
       <InventorySlot
@@ -31,7 +33,8 @@ export default function InventoryPopup({
         origen={origen}
         esPrincipal={esPrincipal}
         item={item}
-        seEstaArrastrando={seEstaArrastrando}
+        oculto={oculto}
+        seleccionado={seleccionado === origen}
         onPointerDown={(e) => iniciarArrastre(e, origen)}
       />
     );
