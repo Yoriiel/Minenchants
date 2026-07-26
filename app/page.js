@@ -123,7 +123,7 @@ export default function Home() {
         posiciones={posiciones}
         casillasHotbar={CASILLAS_HOTBAR}
         popupAbierto={Boolean(popup)}
-        mostrarAviso={!avisoVisto}
+        mostrarAviso={!avisoVisto && esMovil === false}
         onSelectItem={abrirPopup}
       />
 
@@ -156,5 +156,3 @@ export default function Home() {
     </>
   );
 }
-
-//FIN
