@@ -175,7 +175,11 @@
   left: 33px;
   top: 411px;
   display: grid;
+  /* 9 columnas: la misma cantidad que casillasHotbar en page.js,
+     para que esta fila sea 1:1 con la barra HUD real. Si cambiás
+     CASILLAS_HOTBAR en page.js, actualizá también este número. */
   grid-template-columns: repeat(9, var(--popup-casilla-tam));
+  grid-template-rows: var(--popup-casilla-tam);
   column-gap: var(--popup-gap-col);
 }
 
@@ -183,6 +187,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  width: var(--popup-casilla-tam);
+  height: var(--popup-casilla-tam);
 }
 
 /* =========================================================
@@ -211,7 +217,7 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   gap: 2px;
   padding: 2px 12px;
@@ -224,7 +230,7 @@
   line-height: 1.2;
   color: #ffff9e; /* dorado clásico de los nombres de encantamiento */
   text-shadow: 1px 1px 0 #3f3f00;
-  text-align: center;
+  text-align: left;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

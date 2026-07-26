@@ -51,7 +51,7 @@ export const ITEMS = [
     id: "pico",
     titulo: "Pico",
     img: "/img/Pico.gif",
-    encantamientos: ["Reparación", "Irrompibilidad III", "Eficiencia V", "Fortuna III / Toque de Seda"],
+    encantamientos: ["Reparación", "Irrompibilidad III", "Eficiencia V", "Fortuna III"],
   },
   {
     id: "hacha",

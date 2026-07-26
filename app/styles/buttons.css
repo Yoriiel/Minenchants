@@ -25,8 +25,8 @@
   /* Texto */
   color: #ffffff;
   text-decoration: none; /* por si .btn-mc se usa en un <a>, como "Encantar" */
-  font-family: "Segoe UI", system-ui, sans-serif; /* Puedes cambiarla por una pixelada */
-  font-size: 1.1rem;
+  font-family: var(--fuente-mojangles); /* Fuente Mojangles descargada en /fonts */
+  font-size: 0.80rem;
   font-weight: bold;
   text-shadow: 2px 2px 0px #3f3f3f; /* Sombra del texto de Minecraft */
 

@@ -20,7 +20,7 @@ export default function GiroDispositivo() {
         />
         <circle cx="50" cy="72" r="2.5" fill="#ffffff" />
       </svg>
-      <p className="giro-texto">Girá tu teléfono para ver la mesa de encantamientos</p>
+      <p className="giro-texto">Girá tu teléfono para ver la web</p>
     </div>
   );
 }

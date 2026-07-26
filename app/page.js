@@ -18,10 +18,11 @@ import { useDragAndDrop } from "./hooks/useDragAndDrop";
 import { useOrientacionMovil } from "./hooks/useOrientacionMovil";
 import { useMoverPorToque } from "./hooks/useMoverPorToque";
 import { useEsMovil } from "./hooks/useEsMovil";
+import { useTeclaE } from "./hooks/useTeclaE";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const CASILLAS_HOTBAR = 8;
+const CASILLAS_HOTBAR = 9;
 const PARTICULAS_NORMAL = 40;
 
 // Ancho máximo (px) considerado "móvil" para apagar las partículas
@@ -39,8 +40,14 @@ export default function Home() {
   const particulasApiRef = useRef(null);
   const popupEstabaAbiertoRef = useRef(false);
 
-  const { popup, abrirPopup, cerrarPopup, idEnOrigen, moverItem } =
-    useInventoryPopup(ITEMS);
+  const { popup, abrirPopup, cerrarPopup, idEnOrigen, moverItem, posiciones } =
+    useInventoryPopup(ITEMS, CASILLAS_HOTBAR);
+
+  const { avisoVisto } = useTeclaE({
+    popupAbierto: Boolean(popup),
+    abrirPopup,
+    cerrarPopup,
+  });
 
   const { seleccionado, vuelos, ocultosVuelo, alTocarCasilla } = useMoverPorToque({
     idEnOrigen,
@@ -111,17 +118,24 @@ export default function Home() {
 
       <Hero />
 
-      <Hud items={ITEMS} casillasHotbar={CASILLAS_HOTBAR} onSelectItem={abrirPopup} />
+      <Hud
+        itemsPorId={ITEMS_POR_ID}
+        posiciones={posiciones}
+        casillasHotbar={CASILLAS_HOTBAR}
+        popupAbierto={Boolean(popup)}
+        mostrarAviso={!avisoVisto}
+        onSelectItem={abrirPopup}
+      />
 
       {popup && (
         <InventoryPopup
-          popup={popup}
           itemsPorId={ITEMS_POR_ID}
           idEnOrigen={idEnOrigen}
           arrastre={arrastre}
           iniciarArrastre={iniciarArrastre}
           ocultosVuelo={ocultosVuelo}
           seleccionado={seleccionado}
+          casillasHotbar={CASILLAS_HOTBAR}
           onClose={cerrarPopup}
         />
       )}

@@ -4,16 +4,17 @@ import EnchantmentPanel from "./EnchantmentPanel";
 /**
  * Popup modal de la mesa de encantamientos: casilla principal (bajo
  * el libro) + panel de encantamientos a la derecha + grid de 27
- * casillas + fila de hotbar de 9 casillas.
+ * casillas + fila de hotbar (casillasHotbar casillas, la misma fila
+ * que la barra HUD real).
  */
 export default function InventoryPopup({
-  popup,
   itemsPorId,
   idEnOrigen,
   arrastre,
   iniciarArrastre,
   ocultosVuelo,
   seleccionado,
+  casillasHotbar,
   onClose,
 }) {
   // El panel de encantamientos siempre refleja lo que hay AHORA en la
@@ -55,7 +56,7 @@ export default function InventoryPopup({
           {Array.from({ length: 27 }, (_, i) => renderCasilla(i))}
         </div>
         <div className="popup-inventario-hotbar">
-          {Array.from({ length: 9 }, (_, i) => renderCasilla(27 + i))}
+          {Array.from({ length: casillasHotbar }, (_, i) => renderCasilla(27 + i))}
         </div>
       </div>
     </div>

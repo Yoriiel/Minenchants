@@ -24,6 +24,13 @@ export default function RootLayout({ children }) {
                 window.history.scrollRestoration = "manual";
               }
               window.scrollTo(0, 0);
+              if (window.location.hash) {
+                window.history.replaceState(
+                  null,
+                  "",
+                  window.location.pathname + window.location.search
+                );
+              }
             `,
           }}
         />

@@ -91,7 +91,7 @@
 
 .hud-hotbar {
   display: grid;
-  grid-template-columns: repeat(8, minmax(0, 1fr));
+  grid-template-columns: repeat(9, minmax(0, 1fr));
   gap: 2px; /* Reducimos un poco la separación para imitar la imagen */
   background: rgba(139, 139, 139, 0.95); /* Gris clásico de la UI (#8b8b8b) */
   border: 2px solid #000; /* Borde negro exterior */
@@ -145,5 +145,48 @@
   }
   .hud-fila-iconos {
     font-size: 0.75rem;
+  }
+}
+
+/* =========================================================
+   Aviso "Presioná E para abrir el inventario": centrado en la
+   Sección 2, parpadeando, hasta que se abra el popup por primera
+   vez (recién vuelve a aparecer si se recarga toda la página).
+   ========================================================= */
+.hud-aviso-tecla-e {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+  margin: 0;
+  padding: 0.8rem 1.4rem;
+  text-align: center;
+  font-family: var(--fuente-mojangles);
+  font-size: clamp(1rem, 2.6vw, 1.6rem);
+  line-height: 1.5;
+  color: #ffffff;
+  text-shadow: 2px 2px 0 #000;
+  background: rgba(0, 0, 0, 0.35);
+  border-radius: 4px;
+  pointer-events: none;
+  user-select: none;
+  animation: hud-aviso-parpadeo 1.6s ease-in-out infinite;
+}
+
+@keyframes hud-aviso-parpadeo {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hud-aviso-tecla-e {
+    animation: none;
+    opacity: 0.75;
   }
 }
