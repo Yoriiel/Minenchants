@@ -1,146 +1,120 @@
-/* =========================================================
-   MENÚ DE BOTONES (ESTILO MINECRAFT JAVA)
-   ========================================================= */
-
-/* Contenedor que agrupa y centra todos los botones */
 .menu-minecraft {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 15px; /* Espacio vertical entre los botones */
+  gap: 15px;
   width: 100%;
-  max-width: 510px; /* Ancho máximo de la lista de botones */
-  margin: -90px auto 0; /* Margen superior para separarlos del logo */
+  max-width: 510px;
+  margin: -90px auto 0;
 }
 
-/* Diseño base del botón */
 .btn-mc {
-  background-color: rgb(161, 161, 161); /* Gris piedra clásico */
-
-  /* El truco del 3D: borde interno de colores y contorno negro */
+  background-color: rgb(161, 161, 161);
   border: 2px solid;
-  border-color: #ffffff #555555 #555555 #ffffff; /* Arriba/Izq blanco, Abajo/Der oscuro */
-  outline: 2px solid #000000; /* Borde negro exterior */
-
-  /* Texto */
+  border-color: #ffffff #555555 #555555 #ffffff;
+  outline: 2px solid #000000;
   color: #ffffff;
-  text-decoration: none; /* por si .btn-mc se usa en un <a>, como "Encantar" */
-  font-family: var(--fuente-mojangles); /* Fuente Mojangles descargada en /fonts */
+  text-decoration: none;
+  font-family: var(--fuente-mojangles);
   font-size: 0.80rem;
   font-weight: bold;
-  text-shadow: 2px 2px 0px #3f3f3f; /* Sombra del texto de Minecraft */
-
+  text-shadow: 2px 2px 0px #3f3f3f;
   padding: 10px 0;
   cursor: pointer;
   user-select: none;
 }
 
-/* Efecto al pasar el cursor (Hover) */
 .btn-mc:hover,
 .btn-mc:focus-visible {
-  background-color: #7994cd; /* El fondo se vuelve azul pálido */
-  color: #ffff55; /* El texto se vuelve amarillo */
-  text-shadow: 2px 2px 0px #3f3f00; /* Sombra del texto amarillo */
-  outline: 2px solid #ffffff; /* El borde negro se ilumina de blanco */
+  background-color: #7994cd;
+  color: #ffff55;
+  text-shadow: 2px 2px 0px #3f3f00;
+  outline: 2px solid #ffffff;
 }
 
-/* Efecto al hacer clic (Hundido) */
 .btn-mc:active {
-  /* Invertimos la sombra del borde para que parezca que se presiona */
   border-color: #555555 #ffffff #ffffff #555555;
   background-color: #c6c6c6;
 }
 
-/* --- TAMAÑOS Y POSICIONES --- */
-
-/* Botones principales de arriba */
 .btn-largo {
   width: 100%;
 }
 
-/* Fila de abajo (Options y Quit Game) */
 .fila-botones-inferior {
   display: flex;
   width: 100%;
   justify-content: space-between;
-  gap: 12px; /* Separación horizontal */
+  gap: 12px;
   margin: 30px auto 0;
 }
 
 .btn-mitad {
-  flex-grow: 1; /* Hacemos que se estiren para ocupar el medio */
+  flex-grow: 1;
 }
 
-/* Botoncitos cuadrados de las esquinas */
 .btn-cuadrado {
   width: 46px;
-  flex-shrink: 0; /* Evita que se aplasten */
+  flex-shrink: 0;
   font-size: 1.3rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0; /* Sobrescribimos el padding para centrar el icono */
+  padding: 0;
 }
 
-/* =========================================================
-   VERSIÓN MÓVIL: todos los botones achicados a escala (mismo
-   diseño, todo un poco más chico y compacto).
-   ========================================================= */
+/* MÓVIL VERTICAL */
 @media (max-width: 480px) {
   .menu-minecraft {
-    max-width: min(300px, 78vw); /* 👈 AQUÍ: ancho del menú de botones en celulares (antes 510px) */
-    gap: 10px; /* 👈 AQUÍ: separación vertical entre botones (antes 15px) */
-    margin-top: -55px; /* sigue al translateY del logo mobile en hero.css */
+    max-width: min(300px, 78vw);
+    gap: 10px;
+    margin-top: -55px;
   }
-
   .btn-mc {
-    font-size: 0.8rem; /* 👈 AQUÍ: tamaño de letra de los botones (antes 1.1rem) */
-    padding: 7px 0; /* 👈 AQUÍ: alto de los botones largos (antes 10px 0) */
+    font-size: 0.8rem;
+    padding: 7px 0;
   }
-
   .btn-cuadrado {
-    width: 34px; /* 👈 AQUÍ: tamaño de los botones cuadrados (antes 46px) */
+    width: 34px;
     font-size: 1rem;
   }
-
   .fila-botones-inferior {
-    margin-top: 18px; /* 👈 AQUÍ: separación antes de la fila de abajo (antes 30px) */
+    margin-top: 18px;
     gap: 8px;
   }
 }
 
-/* =========================================================
-   VERSIÓN MÓVIL/TABLET EN HORIZONTAL (landscape): mismo criterio
-   que en hero.css, todo escalado con vh para que se adapte al alto
-   real disponible y nunca sea necesario scrollear para ver los
-   botones de abajo. Solo aplica a dispositivos táctiles (dedo),
-   nunca a escritorio.
-   ========================================================= */
+/* MÓVIL/TABLET HORIZONTAL — valores de TABLET */
 @media (pointer: coarse) and (orientation: landscape) {
   .menu-minecraft {
-    /* 👈 AQUÍ: ancho del bloque de botones. */
     max-width: min(300px, 50vh, 78vw);
-    gap: 1.8vh; /* 👈 AQUÍ: separación vertical entre botones */
-    margin-top: -20vh; /* sigue al translateY del logo en hero.css */
+    gap: 1.8vh;
+    margin-top: -20vh;
   }
-
   .btn-mc {
-    /* 👈 AQUÍ: tamaño de letra de los botones largos */
     font-size: clamp(0.55rem, 1.2vh, 0.85rem);
-    /* 👈 AQUÍ: alto de los botones largos (arriba/abajo del texto) */
     padding: 1.9vh 0;
   }
-
   .btn-cuadrado {
-    /* 👈 AQUÍ: tamaño de los botones cuadrados (Idioma/Accesibilidad) */
     width: clamp(40px, 6vh, 40px);
     font-size: clamp(0.7rem, 2vh, 1rem);
   }
-
   .fila-botones-inferior {
-    margin-top: 3.0vh; /* 👈 AQUÍ: separación antes de la fila de abajo */
-    gap: 3vh; /* 👈 AQUÍ: separación horizontal entre esos botones */
+    margin-top: 3.0vh;
+    gap: 3vh;
     display: flex;
     justify-content: center;
+  }
+}
+
+/* SOLO CELULAR HORIZONTAL (pantalla baja, hasta 500px de alto) */
+@media (pointer: coarse) and (orientation: landscape) and (max-height: 500px) {
+  .menu-minecraft {
+    margin-top: -2vh; /* 👈 AQUÍ: sigue al translateY(-4vh) del logo en celular */
+    gap: 1vh; /* 👈 AQUÍ */
+  }
+  .fila-botones-inferior {
+    margin-top: 1.5vh; /* 👈 AQUÍ */
+    gap: 1.5vh;
   }
 }
