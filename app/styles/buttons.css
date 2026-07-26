@@ -119,26 +119,28 @@
 @media (pointer: coarse) and (orientation: landscape) {
   .menu-minecraft {
     /* 👈 AQUÍ: ancho del bloque de botones. */
-    max-width: min(300px, 40vh, 78vw);
-    gap: 1vh; /* 👈 AQUÍ: separación vertical entre botones */
-    margin-top: -3vh; /* sigue al translateY del logo en hero.css */
+    max-width: min(300px, 50vh, 78vw);
+    gap: 1.8vh; /* 👈 AQUÍ: separación vertical entre botones */
+    margin-top: -20vh; /* sigue al translateY del logo en hero.css */
   }
 
   .btn-mc {
     /* 👈 AQUÍ: tamaño de letra de los botones largos */
-    font-size: clamp(0.55rem, 2.2vh, 0.85rem);
+    font-size: clamp(0.55rem, 1.2vh, 0.85rem);
     /* 👈 AQUÍ: alto de los botones largos (arriba/abajo del texto) */
-    padding: 0.8vh 0;
+    padding: 1.9vh 0;
   }
 
   .btn-cuadrado {
     /* 👈 AQUÍ: tamaño de los botones cuadrados (Idioma/Accesibilidad) */
-    width: clamp(26px, 6vh, 40px);
+    width: clamp(40px, 6vh, 40px);
     font-size: clamp(0.7rem, 2vh, 1rem);
   }
 
   .fila-botones-inferior {
-    margin-top: 1.5vh; /* 👈 AQUÍ: separación antes de la fila de abajo */
-    gap: 1vh; /* 👈 AQUÍ: separación horizontal entre esos botones */
+    margin-top: 3.0vh; /* 👈 AQUÍ: separación antes de la fila de abajo */
+    gap: 3vh; /* 👈 AQUÍ: separación horizontal entre esos botones */
+    display: flex;
+    justify-content: center;
   }
 }
