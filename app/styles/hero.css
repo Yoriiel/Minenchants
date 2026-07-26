@@ -97,3 +97,44 @@
     font-size: 0.85rem; /* 👈 AQUÍ: tamaño de "Estos son los Mejores!" en celulares (antes 1.5rem) */
   }
 }
+
+/* =========================================================
+   VERSIÓN MÓVIL/TABLET EN HORIZONTAL (landscape): este es el caso
+   real que ve el usuario, porque la app pide girar el teléfono para
+   usar el HUD/popup (ver GiroDispositivo.js). En horizontal el
+   ancho de pantalla es grande (a veces >480px) pero el ALTO es muy
+   chico, así que acá escalamos todo en base al alto disponible
+   (unidades vh) para que nunca desborde y haya que scrollear.
+
+   Se activa solo con "pointer: coarse" (dedo, no mouse) para no
+   afectar nunca a la versión de escritorio, sea cual sea su ancho.
+   ========================================================= */
+@media (pointer: coarse) and (orientation: landscape) {
+  .seccion-hero {
+    /* 👈 AQUÍ: aire arriba/abajo de todo el bloque. Subilo si ves
+       que el logo queda pegado arriba del todo, bajalo si falta
+       espacio y aparece scroll. */
+    padding-top: 2vh;
+    padding-bottom: 2vh;
+  }
+
+  .hero-contenido {
+    /* 👈 AQUÍ: ancho del bloque logo+splash+botones. El "vh" hace
+       que en pantallas más bajas (celular) el bloque sea más chico,
+       y en pantallas más altas (tablet) crezca, sin pasar nunca de
+       380px ni del 90% del ancho. */
+    max-width: min(380px, 46vh, 90vw);
+  }
+
+  .contenedor-logo {
+    /* 👈 AQUÍ: empuje hacia arriba del logo (negativo = sube). Ligado
+       al alto de pantalla para que no se vaya "de más" en celulares
+       bajitos. */
+    transform: translateY(-4vh);
+  }
+
+  .texto-splash {
+    /* 👈 AQUÍ: tamaño de "Estos son los Mejores!" en horizontal. */
+    font-size: clamp(0.55rem, 3vh, 1rem);
+  }
+}
