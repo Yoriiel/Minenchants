@@ -2,10 +2,14 @@
 
 import { useEffect, useState } from "react";
 
+import { useBloqueoScroll } from "./useBloqueoScroll";
+
 // Casillero 0..26: grid principal (3 filas x 9 columnas).
 // Casillero 27..27+casillasHotbar-1: fila de abajo, la MISMA que la
 // barra HUD real (casilla i del HUD === casillero HOTBAR_INICIO + i).
 const TOTAL_GRID_PRINCIPAL = 27;
+const COLUMNAS_GRID = 9;
+const FILAS_GRID = TOTAL_GRID_PRINCIPAL / COLUMNAS_GRID;
 
 // Bumpeamos la key de guardado: el formato de abajo es incompatible
 // con el de la versión vieja (antes se guardaba un índice 0..35 por
@@ -89,6 +93,30 @@ function primerCasilleroLibre(posiciones, casillasHotbar) {
   return null; // no debería pasar: siempre hay más casilleros que ítems
 }
 
+// Primer casillero libre recorriendo de ABAJO hacia ARRIBA y, dentro
+// de cada fila, de izquierda a derecha: primero la fila de hotbar/HUD
+// (izq. a der.), después la fila más baja del grid de arriba, y así
+// subiendo. Se usa para el atajo de Ctrl+click que saca un ítem de la
+// casilla principal.
+function primerCasilleroLibreDesdeAbajo(posiciones, casillasHotbar) {
+  const ocupados = new Set(Object.values(posiciones));
+  const inicio = hotbarInicio();
+
+  for (let i = 0; i < casillasHotbar; i++) {
+    const casillero = inicio + i;
+    if (!ocupados.has(casillero)) return casillero;
+  }
+
+  for (let fila = FILAS_GRID - 1; fila >= 0; fila--) {
+    for (let col = 0; col < COLUMNAS_GRID; col++) {
+      const casillero = fila * COLUMNAS_GRID + col;
+      if (!ocupados.has(casillero)) return casillero;
+    }
+  }
+
+  return null; // no debería pasar: siempre hay más casilleros que ítems
+}
+
 /**
  * Maneja la apertura/cierre del popup de la mesa de encantamientos y
  * en qué casillero está cada ítem.
@@ -169,19 +197,17 @@ export function useInventoryPopup(items, casillasHotbar) {
     setAbierto(false);
   };
 
-  // Bloquea el scroll de la página y permite cerrar con Escape
-  // mientras el popup está abierto.
+  // Bloquea el scroll de la página mientras el popup está abierto.
+  useBloqueoScroll(abierto);
+
+  // Permite cerrar el popup con Escape.
   useEffect(() => {
     if (!abierto) return;
-    document.body.style.overflow = "hidden";
     const onKeyDown = (e) => {
       if (e.key === "Escape") cerrarPopup();
     };
     window.addEventListener("keydown", onKeyDown);
-    return () => {
-      document.body.style.overflow = "";
-      window.removeEventListener("keydown", onKeyDown);
-    };
+    return () => window.removeEventListener("keydown", onKeyDown);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [abierto]);
 
@@ -238,6 +264,14 @@ export function useInventoryPopup(items, casillasHotbar) {
     });
   };
 
+  // Primer casillero libre buscando desde la fila de abajo (hotbar)
+  // hacia arriba, izquierda a derecha en cada fila. Lo usa el
+  // Ctrl+click cuando el ítem que se mueve está en la casilla
+  // principal (no tiene "destino natural" como sí lo tiene un ítem
+  // que ya estaba en un casillero real).
+  const siguienteCasilleroDesdeAbajo = () =>
+    primerCasilleroLibreDesdeAbajo(posiciones, casillasHotbar);
+
   return {
     popup: abierto ? { principal } : null,
     abrirPopup,
@@ -245,5 +279,6 @@ export function useInventoryPopup(items, casillasHotbar) {
     idEnOrigen,
     moverItem,
     posiciones,
+    siguienteCasilleroDesdeAbajo,
   };
 }

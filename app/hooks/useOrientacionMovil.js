@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 
+import { useBloqueoScroll } from "./useBloqueoScroll";
+
 /**
  * Detecta dispositivos "chicos y táctiles" (celulares) en modo
  * vertical. Se usa para pedirles que giren el teléfono antes de usar
@@ -26,6 +28,11 @@ export function useOrientacionMovil() {
       mqVertical.removeEventListener("change", evaluar);
     };
   }, []);
+
+  // Mientras se muestra el aviso de girar el teléfono, bloqueamos el
+  // scroll de la página (solo pasa en móvil, que es cuando este aviso
+  // puede estar activo).
+  useBloqueoScroll(necesitaGirar);
 
   return necesitaGirar;
 }

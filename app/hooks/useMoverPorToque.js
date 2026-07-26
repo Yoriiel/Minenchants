@@ -39,7 +39,10 @@ export function useMoverPorToque({ idEnOrigen, moverItem, popupAbierto }) {
     setOcultosVuelo(new Set());
   }, [popupAbierto]);
 
-  const lanzarVuelo = (origen, destino) => {
+  // Mueve el ítem de `origen` a `destino` con la animación de "vuelo"
+  // corta (si `destino` ya tenía otro ítem, ambos se cruzan). La usa
+  // tanto la selección con Shift/toque como el atajo de Ctrl+click.
+  const moverConAnimacion = (origen, destino) => {
     const idOrigen = idEnOrigen(origen);
     if (!idOrigen) return;
     const idDestino = idEnOrigen(destino);
@@ -80,10 +83,16 @@ export function useMoverPorToque({ idEnOrigen, moverItem, popupAbierto }) {
       }
       if (actual === origen) return null; // tocar lo mismo de nuevo cancela
 
-      lanzarVuelo(actual, origen);
+      moverConAnimacion(actual, origen);
       return null;
     });
   };
 
-  return { seleccionado, vuelos, ocultosVuelo, alTocarCasilla };
+  // Cancela la selección activa (sin mover nada). Se usa cuando el
+  // usuario, con un ítem seleccionado por Shift/toque, hace click en
+  // cualquier punto del popup que no sea otra casilla (fondo del
+  // popup, panel de encantamientos, etc.).
+  const limpiarSeleccion = () => setSeleccionado(null);
+
+  return { seleccionado, vuelos, ocultosVuelo, alTocarCasilla, moverConAnimacion, limpiarSeleccion };
 }

@@ -40,7 +40,7 @@ export default function Home() {
   const particulasApiRef = useRef(null);
   const popupEstabaAbiertoRef = useRef(false);
 
-  const { popup, abrirPopup, cerrarPopup, idEnOrigen, moverItem, posiciones } =
+  const { popup, abrirPopup, cerrarPopup, idEnOrigen, moverItem, posiciones, siguienteCasilleroDesdeAbajo } =
     useInventoryPopup(ITEMS, CASILLAS_HOTBAR);
 
   const { avisoVisto } = useTeclaE({
@@ -49,11 +49,12 @@ export default function Home() {
     cerrarPopup,
   });
 
-  const { seleccionado, vuelos, ocultosVuelo, alTocarCasilla } = useMoverPorToque({
-    idEnOrigen,
-    moverItem,
-    popupAbierto: Boolean(popup),
-  });
+  const { seleccionado, vuelos, ocultosVuelo, alTocarCasilla, moverConAnimacion, limpiarSeleccion } =
+    useMoverPorToque({
+      idEnOrigen,
+      moverItem,
+      popupAbierto: Boolean(popup),
+    });
 
   const { arrastre, iniciarArrastre, fantasmaRef, ultimaPosRef } = useDragAndDrop({
     idEnOrigen,
@@ -131,10 +132,13 @@ export default function Home() {
         <InventoryPopup
           itemsPorId={ITEMS_POR_ID}
           idEnOrigen={idEnOrigen}
+          moverConAnimacion={moverConAnimacion}
+          siguienteCasilleroDesdeAbajo={siguienteCasilleroDesdeAbajo}
           arrastre={arrastre}
           iniciarArrastre={iniciarArrastre}
           ocultosVuelo={ocultosVuelo}
           seleccionado={seleccionado}
+          limpiarSeleccion={limpiarSeleccion}
           casillasHotbar={CASILLAS_HOTBAR}
           onClose={cerrarPopup}
         />
