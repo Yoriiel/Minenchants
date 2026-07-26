@@ -19,6 +19,7 @@ import { useOrientacionMovil } from "./hooks/useOrientacionMovil";
 import { useMoverPorToque } from "./hooks/useMoverPorToque";
 import { useEsMovil } from "./hooks/useEsMovil";
 import { useTeclaE } from "./hooks/useTeclaE";
+import { useBloquearSeleccionTotal } from "./hooks/useBloquearSeleccionTotal";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -63,6 +64,8 @@ export default function Home() {
   });
 
   const necesitaGirar = useOrientacionMovil();
+
+  useBloquearSeleccionTotal();
 
   // Ancho de pantalla "móvil" (independiente de la orientación): ahí
   // no montamos <Particles /> para nada, ni siquiera apagadas.

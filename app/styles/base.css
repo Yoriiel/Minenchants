@@ -13,6 +13,23 @@
   box-sizing: border-box;
 }
 
+/* =========================================================
+   Sin selección de texto ni "copiar" en toda la página: nada de
+   arrastrar imágenes fuera, ni menú de "guardar imagen"/copiar en
+   long-press de iOS, ni Ctrl+A. Los ítems del popup se siguen
+   pudiendo tomar y arrastrar (eso es Pointer Events, no selección de
+   texto/imagen — no lo toca esta regla).
+   ========================================================= */
+* {
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none; /* iOS: apaga el menú de copiar/guardar al mantener presionado */
+}
+
+img {
+  -webkit-user-drag: none; /* evita el drag nativo del navegador sobre imágenes */
+}
+
 html,
 body {
   margin: 0;
