@@ -45,7 +45,7 @@ export default function Hud({
                 </span>
               ))}
             </div>
-            <span className="hud-xp-numero">15</span>
+            <span className="hud-xp-numero">32</span>
             <div className="hud-grupo-derecha">
               {Array.from({ length: 10 }, (_, i) => (
                 <span className="hud-muslito" key={i}>
