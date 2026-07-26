@@ -94,7 +94,7 @@
   .seccion-hero {
     min-height: auto; /* 👈 AQUÍ: no fuerza a llenar la pantalla */
     padding-top: 10vh; /* 👈 AQUÍ */
-    padding-bottom: 21vh; /* 👈 AQUÍ (antes 70vh) */
+    padding-bottom: 25vh; /* 👈 AQUÍ (antes 70vh) */
   }
   .contenedor-logo {
     transform: translateY(-4vh); /* 👈 AQUÍ */
