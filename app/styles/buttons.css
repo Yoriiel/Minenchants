@@ -110,11 +110,11 @@
 /* SOLO CELULAR HORIZONTAL (pantalla baja, hasta 500px de alto) */
 @media (pointer: coarse) and (orientation: landscape) and (max-height: 500px) {
   .menu-minecraft {
-    margin-top: -2vh; /* 👈 AQUÍ: sigue al translateY(-4vh) del logo en celular */
-    gap: 1vh; /* 👈 AQUÍ */
+    margin-top: -4vh; /* 👈 AQUÍ: sigue al translateY(-4vh) del logo en celular */
+    gap: 1.9vh; /* 👈 AQUÍ */
   }
   .fila-botones-inferior {
-    margin-top: 1.5vh; /* 👈 AQUÍ */
-    gap: 1.5vh;
+    margin-top: 2.5vh; /* 👈 AQUÍ */
+    gap: 2.5vh;
   }
 }

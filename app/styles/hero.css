@@ -93,8 +93,8 @@
 @media (pointer: coarse) and (orientation: landscape) and (max-height: 500px) {
   .seccion-hero {
     min-height: auto; /* 👈 AQUÍ: no fuerza a llenar la pantalla */
-    padding-top: 4vh; /* 👈 AQUÍ */
-    padding-bottom: 4vh; /* 👈 AQUÍ (antes 70vh) */
+    padding-top: 10vh; /* 👈 AQUÍ */
+    padding-bottom: 21vh; /* 👈 AQUÍ (antes 70vh) */
   }
   .contenedor-logo {
     transform: translateY(-4vh); /* 👈 AQUÍ */
