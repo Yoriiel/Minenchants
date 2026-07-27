@@ -15,8 +15,12 @@
   position: fixed;
   inset: 0;
   z-index: 100;
-  background: rgba(5, 3, 10, 0.75);
-  backdrop-filter: blur(3px);
+  /* Antes tenía backdrop-filter: blur(3px) — lo sacamos porque es
+     caro en GPU/CPU: el navegador tiene que desenfocar TODO lo que
+     hay detrás (incluidas las partículas animándose) en cada frame.
+     Subimos un poco la opacidad para compensar visualmente la falta
+     de blur. AJUSTAR ACÁ el número si lo querés más oscuro/claro. */
+  background: rgba(5, 3, 10, 0.88);
   display: flex;
   align-items: center;
   justify-content: center;

@@ -38,22 +38,14 @@ const PARTICULAS_MOVIL = 55;
 // canvas de partículas simulándose al mismo tiempo (header + sección
 // 2) y conviene repartir el presupuesto de CPU entre ambos. AJUSTAR
 // ACÁ para subir o bajar esa cantidad.
-const PARTICULAS_MOVIL_SECCION2 = 5;
+const PARTICULAS_MOVIL_SECCION2 = 20;
 
 // Ancho máximo (px) considerado "móvil" para apagar las partículas
 // del todo. AJUSTAR ACÁ si querés correr ese límite.
 const ANCHO_MOVIL_PARTICULAS = 768;
 
-// Cuántos pasos da la reaparición gradual de partículas al cerrar el
-// popup, y cuánto se espera entre paso y paso: más pasos/ms = más
-// lenta y suave. AJUSTAR ACÁ la velocidad del "desvanecimiento
-// inverso".
-const PASOS_REAPARICION_PARTICULAS = 15;
-const MS_ENTRE_PASOS_REAPARICION = 40;
-
 export default function Home() {
   const particulasApiRef = useRef(null);
-  const popupEstabaAbiertoRef = useRef(false);
 
   const { popup, abrirPopup, cerrarPopup, idEnOrigen, moverItem, posiciones, siguienteCasilleroDesdeAbajo } =
     useInventoryPopup(ITEMS, CASILLAS_HOTBAR);
@@ -106,42 +98,15 @@ export default function Home() {
   const modoParticulasEscritorio = esMovil === false && esTactil === false;
 
   // Al abrir el popup (en PC, donde SÍ hay partículas montadas): las
-  // apagamos de una para no gastar CPU mientras se usa la mesa de
-  // encantamientos. Al cerrarlo: no las prendemos todas de golpe,
-  // las vamos trayendo de a poco (efecto contrario a un fundido).
+  // pausamos in situ — dejan de moverse pero siguen dibujadas donde
+  // estaban, no se ocultan — para no gastar CPU en la física mientras
+  // se usa la mesa de encantamientos. Al cerrarlo, se despausan y
+  // retoman el movimiento desde ahí mismo: sin ningún efecto de
+  // "reaparición".
   useEffect(() => {
     const api = particulasApiRef.current;
     if (!api) return; // no hay partículas montadas (estamos en móvil)
-
-    const abierto = Boolean(popup);
-    const estabaAbierto = popupEstabaAbiertoRef.current;
-    popupEstabaAbiertoRef.current = abierto;
-    if (abierto === estabaAbierto) return; // sin cambio real
-
-    let cancelado = false;
-    let idIntervalo = null;
-
-    if (abierto) {
-      api.setCantidad(0);
-    } else {
-      let actual = 0;
-      const paso = Math.max(1, Math.ceil(PARTICULAS_NORMAL / PASOS_REAPARICION_PARTICULAS));
-      idIntervalo = window.setInterval(() => {
-        if (cancelado) return;
-        actual += paso;
-        if (actual >= PARTICULAS_NORMAL) {
-          api.setCantidad(PARTICULAS_NORMAL);
-          clearInterval(idIntervalo);
-        } else {
-          api.setCantidad(actual);
-        }
-      }, MS_ENTRE_PASOS_REAPARICION);
-    }
-
-    return () => {
-      cancelado = true;
-      if (idIntervalo) clearInterval(idIntervalo);
-    };
+    api.setPausado(Boolean(popup));
   }, [popup]);
 
   return (

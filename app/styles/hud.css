@@ -198,7 +198,7 @@
        todo se achica junto y proporcional, sin tener que tocar cada
        elemento por separado. Subí o bajá este número para agrandar
        o achicar el HUD completo (1 = tamaño normal de escritorio). */
-    --hud-escala-movil: 0.85;
+    --hud-escala-movil: 0.65;
 
     bottom: 1.5%;
     width: min(85%, 480px); /* ancho del HUD antes de escalar */
@@ -213,7 +213,7 @@
    vertical de arriba: AJUSTAR ACÁ el achique del HUD en tablet. */
 @media (pointer: coarse) and (orientation: landscape) {
   .hud {
-    --hud-escala-tablet: 0.85;
+    --hud-escala-tablet: 0.65;
 
     transform: translateX(-50%) scale(var(--hud-escala-tablet));
     transform-origin: bottom center;
