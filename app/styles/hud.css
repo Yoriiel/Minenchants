@@ -140,13 +140,83 @@
   outline: none;
 }
 
+/* =========================================================
+   Botón "⋯" (abre el inventario) — pensado para pantallas
+   táctiles donde no hay teclado físico para presionar "E".
+   Reutiliza el estilo gris de los botones cuadrados del header
+   (.btn-mc.btn-cuadrado, ver buttons.css); acá solo se define la
+   POSICIÓN y en qué tamaños de pantalla se muestra.
+
+   `position: absolute` (no `fixed`): queda anclado adentro de
+   `.seccion-marcadores` (que ya tiene `position: relative` más
+   arriba en este archivo), así SOLO aparece dentro de la Sección 2,
+   nunca flotando sobre el header ni el resto de la página.
+
+   Oculto en escritorio real: para contar como "sin teclado" pedimos
+   `pointer: coarse` (dedo, no mouse) Y `hover: none` (sin trackpad
+   ni mouse para hacer hover) al mismo tiempo — una laptop táctil
+   normal tiene trackpad (hover: hover) aunque su pantalla sea
+   touch, así que con esto NO cuenta como "sin teclado" y el botón
+   no le aparece; un celular o tablet real sí cumple ambas cosas.
+   Nota de especificidad: `buttons.css` se importa DESPUÉS de este
+   archivo y ahí `.btn-cuadrado { display: flex }` no tiene ninguna
+   media query — con la misma especificidad (una sola clase), esa
+   regla le ganaba a nuestro `display: none` de acá solo por venir
+   después en la cascada. Por eso combinamos `.btn-cuadrado.hud-boton-menu`
+   (dos clases juntas = más especificidad) en vez de `.hud-boton-menu`
+   sola, así estas reglas SIEMPRE ganan sin importar el orden de los
+   archivos.
+   ========================================================= */
+.btn-cuadrado.hud-boton-menu {
+  display: none;
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 20; /* por encima del HUD y las partículas, debajo del popup (100) */
+  width: 42px;
+  height: 42px;
+  font-size: 0.7rem;
+}
+
+@media (max-width: 480px) and (hover: none) {
+  .btn-cuadrado.hud-boton-menu {
+    display: flex; /* 👈 AQUÍ: se muestra en celular vertical */
+  }
+}
+
+@media (pointer: coarse) and (orientation: landscape) and (hover: none) {
+  .btn-cuadrado.hud-boton-menu {
+    display: flex; /* 👈 AQUÍ: se muestra en tablet / celular horizontal */
+  }
+}
+
 @media (max-width: 480px) {
   .hud {
+    /* 👈 AQUÍ SE CONTROLA EL TAMAÑO DE TODO EL HUD EN MÓVIL:
+       al ir en transform:scale() sobre .hud (el contenedor de TODO:
+       corazones, muslos, barra de xp Y la hotbar con sus ítems),
+       todo se achica junto y proporcional, sin tener que tocar cada
+       elemento por separado. Subí o bajá este número para agrandar
+       o achicar el HUD completo (1 = tamaño normal de escritorio). */
+    --hud-escala-movil: 0.85;
+
     bottom: 1.5%;
-    width: min(85%, 480px); /* 👈 AQUÍ: un poquito más chico que el 92%/620px de escritorio (achique leve, a propósito) */
+    width: min(85%, 480px); /* ancho del HUD antes de escalar */
+    transform: translateX(-50%) scale(var(--hud-escala-movil));
+    transform-origin: bottom center; /* achica hacia su ancla inferior, no se despega del borde */
   }
-  .hud-fila-iconos {
-    font-size: 0.75rem;
+}
+
+/* TABLET / CELULAR HORIZONTAL — mismo criterio que ya usan hero.css y
+   buttons.css para distinguir "tablet" en este proyecto. Variable
+   PROPIA (--hud-escala-tablet), independiente de la de celular
+   vertical de arriba: AJUSTAR ACÁ el achique del HUD en tablet. */
+@media (pointer: coarse) and (orientation: landscape) {
+  .hud {
+    --hud-escala-tablet: 0.85;
+
+    transform: translateX(-50%) scale(var(--hud-escala-tablet));
+    transform-origin: bottom center;
   }
 }
 

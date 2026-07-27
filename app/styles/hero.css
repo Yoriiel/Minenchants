@@ -56,6 +56,19 @@
   }
 }
 
+/* =========================================================
+   Apagado del splash cuando el header queda fuera de la vista
+   (el usuario ya scrolleó a la Sección 2): `animation: none` saca
+   la animación infinita de la línea de tiempo del navegador (no
+   solo la pausa) y `opacity: 0` lo oculta del todo. Al volver, con
+   solo sacar esta clase (ver useEnVista.js en Hero.js) se reactiva
+   DE UNA, sin transición ni delay.
+   ========================================================= */
+.header-fuera-de-vista .texto-splash {
+  animation: none;
+  opacity: 0;
+}
+
 /* MÓVIL VERTICAL */
 @media (max-width: 480px) {
   .seccion-hero {

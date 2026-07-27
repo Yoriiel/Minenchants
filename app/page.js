@@ -18,6 +18,7 @@ import { useDragAndDrop } from "./hooks/useDragAndDrop";
 import { useOrientacionMovil } from "./hooks/useOrientacionMovil";
 import { useMoverPorToque } from "./hooks/useMoverPorToque";
 import { useEsMovil } from "./hooks/useEsMovil";
+import { useEsTactil } from "./hooks/useEsTactil";
 import { useTeclaE } from "./hooks/useTeclaE";
 import { useBloquearSeleccionTotal } from "./hooks/useBloquearSeleccionTotal";
 
@@ -88,6 +89,22 @@ export default function Home() {
   // (ver prop `particulasMovil` de Hero).
   const esMovil = useEsMovil(ANCHO_MOVIL_PARTICULAS);
 
+  // Dispositivo táctil (pointer: coarse) sin importar el ancho: una
+  // tablet en horizontal puede medir más que ANCHO_MOVIL_PARTICULAS
+  // y aun así seguir siendo táctil. Sin esto, esas tablets caían en
+  // la rama "escritorio" de acá abajo (esMovil === false) y las
+  // partículas de Hero/Hud (PARTICULAS_MOVIL / PARTICULAS_MOVIL_SECCION2)
+  // quedaban montadas en 0 dispositivos: por eso al tocar esos
+  // números "no subían ni bajaban" en tablet.
+  const esTactil = useEsTactil();
+
+  // 👈 ACÁ es donde se decide, en JS, si usamos el modo "partículas
+  // chicas de Hero/Hud" (móvil o tablet) o el modo "canvas grande de
+  // escritorio": basta con que se cumpla CUALQUIERA de los dos
+  // criterios (ancho angosto O dispositivo táctil).
+  const modoParticulasMovil = esMovil === true || esTactil === true;
+  const modoParticulasEscritorio = esMovil === false && esTactil === false;
+
   // Al abrir el popup (en PC, donde SÍ hay partículas montadas): las
   // apagamos de una para no gastar CPU mientras se usa la mesa de
   // encantamientos. Al cerrarlo: no las prendemos todas de golpe,
@@ -129,7 +146,7 @@ export default function Home() {
 
   return (
     <>
-      {esMovil === false && (
+      {modoParticulasEscritorio && (
         <Particles
           ref={particulasApiRef}
           className="canvas-particulas"
@@ -137,16 +154,16 @@ export default function Home() {
         />
       )}
 
-      <Hero particulasMovil={esMovil === true} cantidadParticulasMovil={PARTICULAS_MOVIL} />
+      <Hero particulasMovil={modoParticulasMovil} cantidadParticulasMovil={PARTICULAS_MOVIL} />
 
       <Hud
         itemsPorId={ITEMS_POR_ID}
         posiciones={posiciones}
         casillasHotbar={CASILLAS_HOTBAR}
         popupAbierto={Boolean(popup)}
-        mostrarAviso={!avisoVisto && esMovil === false}
+        mostrarAviso={!avisoVisto && modoParticulasEscritorio}
         onSelectItem={abrirPopup}
-        particulasMovil={esMovil === true}
+        particulasMovil={modoParticulasMovil}
         cantidadParticulasMovil={PARTICULAS_MOVIL_SECCION2}
       />
 

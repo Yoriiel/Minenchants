@@ -31,11 +31,22 @@ export default function Hud({
 
   return (
     <section id="seccion-marcadores" className="seccion seccion-marcadores">
-      {particulasMovil && (
+      {particulasMovil && !popupAbierto && (
         <Particles
           className="canvas-particulas-movil"
           cantidadBase={cantidadParticulasMovil}
         />
+      )}
+
+      {!popupAbierto && (
+        <button
+          type="button"
+          className="btn-mc btn-cuadrado hud-boton-menu"
+          onClick={() => onSelectItem()}
+          aria-label="Abrir inventario"
+        >
+          <span aria-hidden="true">&bull;&bull;&bull;</span>
+        </button>
       )}
 
       {mostrarAviso && (
