@@ -1,3 +1,5 @@
+import Particles from "./Particles";
+
 // Debe coincidir con TOTAL_GRID_PRINCIPAL en useInventoryPopup.js:
 // la fila de abajo del popup empieza en el casillero 27, y esa fila
 // es exactamente la misma que esta barra HUD (casilla i <-> 27 + i).
@@ -18,6 +20,8 @@ export default function Hud({
   popupAbierto,
   mostrarAviso,
   onSelectItem,
+  particulasMovil = false,
+  cantidadParticulasMovil = 12,
 }) {
   // Invertimos posiciones -> qué idItem hay en cada casillero de la hotbar.
   const idsPorCasillero = {};
@@ -27,6 +31,13 @@ export default function Hud({
 
   return (
     <section id="seccion-marcadores" className="seccion seccion-marcadores">
+      {particulasMovil && (
+        <Particles
+          className="canvas-particulas-movil"
+          cantidadBase={cantidadParticulasMovil}
+        />
+      )}
+
       {mostrarAviso && (
         <p className="hud-aviso-tecla-e" aria-hidden="true">
           Presiona la tecla &quot;E&quot;

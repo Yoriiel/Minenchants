@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 
 import { useBloqueoScroll } from "./useBloqueoScroll";
 
@@ -142,13 +142,40 @@ export function useInventoryPopup(items, casillasHotbar) {
   const [principal, setPrincipal] = useState(null);
   const [principalUltimaPosicion, setPrincipalUltimaPosicion] = useState(null);
 
-  const [posiciones, setPosiciones] = useState(() => {
+  // OJO: este inicializador de useState corre tanto en el servidor
+  // como en el cliente (durante la hidratación). Antes acá mismo se
+  // leía localStorage — pero en el servidor `window` no existe, así
+  // que el servidor SIEMPRE devolvía el orden por defecto del
+  // catálogo, mientras que en el cliente (si había algo guardado)
+  // se devolvía un orden distinto. Eso es un mismatch de hidratación:
+  // React arranca reconciliando un HTML de servidor con un árbol de
+  // cliente que no coincide, y con <img> (los GIFs) a veces no logra
+  // "limpiar" bien la diferencia y deja un nodo viejo pegado en el
+  // DOM — esa era la causa real de los ítems duplicados en la HUD.
+  //
+  // Ahora el primer render (servidor Y cliente) usa siempre el orden
+  // por defecto, así los dos coinciden. Lo guardado en localStorage
+  // se aplica después, ya montados en el cliente (ver useLayoutEffect
+  // más abajo), que es una actualización 100% del lado del cliente y
+  // no un choque servidor/cliente.
+  const [posiciones, setPosiciones] = useState(() =>
+    generarPosicionesIniciales(items, casillasHotbar)
+  );
+
+  // Aplica lo guardado en localStorage apenas se monta en el cliente.
+  // useLayoutEffect (en vez de useEffect) para que corra antes de que
+  // el navegador pinte el primer frame, y así no se alcance a ver un
+  // parpadeo del orden por defecto antes de saltar al guardado.
+  useLayoutEffect(() => {
     const guardadas = cargarPosicionesGuardadas(items, casillasHotbar);
-    if (guardadas) return guardadas;
-    const iniciales = generarPosicionesIniciales(items, casillasHotbar);
-    guardarPosiciones(iniciales);
-    return iniciales;
-  });
+    if (guardadas) {
+      setPosiciones(guardadas);
+    } else {
+      guardarPosiciones(generarPosicionesIniciales(items, casillasHotbar));
+    }
+    // Solo nos interesa correr esto una vez, al montar.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Ítem que ocupa un casillero real dado (o null si está vacío).
   const idEnCasillero = (casillero) => {

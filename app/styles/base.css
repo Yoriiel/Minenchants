@@ -66,6 +66,19 @@ html {
   z-index: 50;
 }
 
+/* Variante MÓVIL: en vez de fixed a toda la página, queda absoluta
+   dentro del header (.seccion-hero tiene position:relative y
+   overflow:hidden vía .seccion), así el canvas se recorta al tamaño
+   del header y nunca se ve sobre la sección 2. */
+.canvas-particulas-movil {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 5;
+}
+
 .seccion {
   position: relative;
   width: 100%;

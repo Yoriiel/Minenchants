@@ -24,7 +24,20 @@ import { useBloquearSeleccionTotal } from "./hooks/useBloquearSeleccionTotal";
 gsap.registerPlugin(ScrollTrigger);
 
 const CASILLAS_HOTBAR = 9;
-const PARTICULAS_NORMAL = 40;
+const PARTICULAS_NORMAL = 65;
+
+// Cantidad de partículas del header en la versión MÓVIL (pantallas
+// angostas): bastante menos que en escritorio (PARTICULAS_NORMAL) por
+// rendimiento, ya que son dispositivos con menos CPU/GPU disponible.
+// AJUSTAR ACÁ para subir o bajar esa cantidad.
+const PARTICULAS_MOVIL = 55;
+
+// Cantidad de partículas de la sección 2 (HUD) en móvil. Un poco menos
+// que las del header (PARTICULAS_MOVIL) porque en móvil ya hay DOS
+// canvas de partículas simulándose al mismo tiempo (header + sección
+// 2) y conviene repartir el presupuesto de CPU entre ambos. AJUSTAR
+// ACÁ para subir o bajar esa cantidad.
+const PARTICULAS_MOVIL_SECCION2 = 5;
 
 // Ancho máximo (px) considerado "móvil" para apagar las partículas
 // del todo. AJUSTAR ACÁ si querés correr ese límite.
@@ -67,8 +80,12 @@ export default function Home() {
 
   useBloquearSeleccionTotal();
 
-  // Ancho de pantalla "móvil" (independiente de la orientación): ahí
-  // no montamos <Particles /> para nada, ni siquiera apagadas.
+  // Ancho de pantalla "móvil" (independiente de la orientación). En
+  // escritorio (esMovil === false) montamos el canvas de partículas
+  // "grande" (fixed, cubre header + sección 2, ver más abajo). En
+  // móvil (esMovil === true) NO montamos ese, pero Hero sí monta su
+  // propio canvas de partículas más chico, acotado solo al header
+  // (ver prop `particulasMovil` de Hero).
   const esMovil = useEsMovil(ANCHO_MOVIL_PARTICULAS);
 
   // Al abrir el popup (en PC, donde SÍ hay partículas montadas): las
@@ -120,7 +137,7 @@ export default function Home() {
         />
       )}
 
-      <Hero />
+      <Hero particulasMovil={esMovil === true} cantidadParticulasMovil={PARTICULAS_MOVIL} />
 
       <Hud
         itemsPorId={ITEMS_POR_ID}
@@ -129,6 +146,8 @@ export default function Home() {
         popupAbierto={Boolean(popup)}
         mostrarAviso={!avisoVisto && esMovil === false}
         onSelectItem={abrirPopup}
+        particulasMovil={esMovil === true}
+        cantidadParticulasMovil={PARTICULAS_MOVIL_SECCION2}
       />
 
       {popup && (
