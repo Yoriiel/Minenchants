@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Particles from "./Particles";
 import Burbuja from "./Burbuja";
+import ModalConfirmacion from "./ModalConfirmacion";
 import { useEnVista } from "../hooks/useEnVista";
 import { useMusicPlayer } from "../hooks/useMusicPlayer";
 import { useConfiguracionContext } from "../context/ConfiguracionContext";
@@ -24,6 +25,20 @@ export default function Hero({ particulasMovil = false, cantidadParticulasMovil 
   } = useConfiguracionContext();
 
   const { idioma, setIdioma, t } = useIdioma();
+
+  const [mostrarConfirmacionPdf, setMostrarConfirmacionPdf] = useState(false);
+  const urlPdf = idioma === "en" ? "/pdf/encantamientos-en.pdf" : "/pdf/encantamientos-es.pdf";
+  const nombreArchivoPdf = t("nombreArchivoPdf");
+
+  const confirmarDescargaPdf = () => {
+    const enlace = document.createElement("a");
+    enlace.href = urlPdf;
+    enlace.download = nombreArchivoPdf;
+    document.body.appendChild(enlace);
+    enlace.click();
+    document.body.removeChild(enlace);
+    setMostrarConfirmacionPdf(false);
+  };
 
   const {
     activo: musicaActiva,
@@ -127,7 +142,13 @@ export default function Hero({ particulasMovil = false, cantidadParticulasMovil 
 
         <div className="menu-minecraft">
           <a href="#seccion-marcadores" className="btn-mc btn-largo">{t("encantar")}</a>
-          <button className="btn-mc btn-largo">{t("descargarPdf")}</button>
+          <button
+            type="button"
+            className="btn-mc btn-largo"
+            onClick={() => setMostrarConfirmacionPdf(true)}
+          >
+            {t("descargarPdf")}
+          </button>
           <button className="btn-mc btn-largo">{t("javaEdition")}</button>
 
           <div className="fila-botones-inferior" ref={filaBotonesRef}>
@@ -258,6 +279,16 @@ export default function Hero({ particulasMovil = false, cantidadParticulasMovil 
           </div>
         </div>
       </div>
+
+      {mostrarConfirmacionPdf && (
+        <ModalConfirmacion
+          mensaje={t("confirmarDescargaTitulo").replace("{nombre}", nombreArchivoPdf)}
+          textoConfirmar={t("confirmarDescargaSi")}
+          textoCancelar={t("confirmarDescargaNo")}
+          onConfirmar={confirmarDescargaPdf}
+          onCancelar={() => setMostrarConfirmacionPdf(false)}
+        />
+      )}
     </header>
   );
 }
