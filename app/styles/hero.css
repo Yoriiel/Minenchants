@@ -14,9 +14,17 @@
 }
 
 .hero-contenido {
+  position: relative;
+  z-index: 2;
   max-width: 700px;
   width: 100%;
   padding: 0 1.5rem;
+}
+
+.hero-logo {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
 }
 
 .contenedor-logo {
@@ -24,12 +32,6 @@
   display: inline-block;
   width: 100%;
   transform: translateY(-85px);
-}
-
-.hero-logo {
-  width: 100%;
-  height: auto;
-  object-fit: contain;
 }
 
 .texto-splash {
@@ -56,17 +58,13 @@
   }
 }
 
-/* =========================================================
-   Apagado del splash cuando el header queda fuera de la vista
-   (el usuario ya scrolleó a la Sección 2): `animation: none` saca
-   la animación infinita de la línea de tiempo del navegador (no
-   solo la pausa) y `opacity: 0` lo oculta del todo. Al volver, con
-   solo sacar esta clase (ver useEnVista.js en Hero.js) se reactiva
-   DE UNA, sin transición ni delay.
-   ========================================================= */
 .header-fuera-de-vista .texto-splash {
   animation: none;
   opacity: 0;
+}
+
+.animaciones-apagadas .texto-splash {
+  animation: none;
 }
 
 /* MÓVIL VERTICAL */

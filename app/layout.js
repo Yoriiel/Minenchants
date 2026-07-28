@@ -1,4 +1,5 @@
 import "./globals.css";
+import ProveedorApp from "./components/ProveedorApp";
 
 export const metadata = {
   title: "Minenchants",
@@ -60,7 +61,9 @@ export default function RootLayout({ children }) {
           li { color: #FFFFFF; }
         `}</style>
       </head>
-      <body>{children}</body>
+      <body>
+        <ProveedorApp>{children}</ProveedorApp>
+      </body>
     </html>
   );
 }

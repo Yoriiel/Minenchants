@@ -1,18 +1,8 @@
 import Particles from "./Particles";
+import ItemImagen from "./ItemImagen";
 
-// Debe coincidir con TOTAL_GRID_PRINCIPAL en useInventoryPopup.js:
-// la fila de abajo del popup empieza en el casillero 27, y esa fila
-// es exactamente la misma que esta barra HUD (casilla i <-> 27 + i).
 const HOTBAR_INICIO = 27;
 
-/**
- * Sección 2: HUD estilo Minecraft (corazones, hambre, barra de xp
- * y la hotbar donde se hace click para abrir el popup de un ítem).
- *
- * Qué ítem aparece en cada casilla sale de `posiciones` (la misma
- * fuente de verdad que usa el popup): si el jugador saca un ítem de
- * esta fila y lo sube a alguna de las 3 de arriba, acá queda vacío.
- */
 export default function Hud({
   itemsPorId,
   posiciones,
@@ -91,14 +81,14 @@ export default function Hud({
             const item = !popupAbierto && idItem ? itemsPorId[idItem] : null;
             return (
               <button
-                key={idItem ?? `vacio-${i}`}
+                key={idItem ?? `vacio-${i}`} 
                 type="button"
                 className="hud-casilla"
                 disabled={!item}
                 onClick={() => item && onSelectItem(item)}
                 aria-label={item ? `Ver encantamientos de ${item.titulo}` : "Casilla vacía"}
               >
-                {item && <img src={item.img} alt={item.titulo} />}
+                {item && <ItemImagen src={item.img} alt={item.titulo} />}
               </button>
             );
           })}

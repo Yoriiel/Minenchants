@@ -63,6 +63,18 @@
   padding: 0;
 }
 
+.boton-con-burbuja {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.grupo-central {
+  position: relative;
+  display: flex;
+  flex-grow: 1;
+  gap: 12px;
+}
+
 /* MÓVIL VERTICAL */
 @media (max-width: 480px) {
   .menu-minecraft {

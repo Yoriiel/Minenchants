@@ -1,38 +1,25 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Particles from "./Particles";
+import Burbuja from "./Burbuja";
 import { useEnVista } from "../hooks/useEnVista";
+import { useConfiguracionContext } from "../context/ConfiguracionContext";
 
-// Cuántos pasos da la reaparición gradual de las partículas del
-// header al volver a él, y cuánto se espera entre paso y paso: más
-// pasos/ms = más lenta y suave (mismo patrón que ya se usa en
-// page.js para las partículas al cerrar el popup). AJUSTAR ACÁ la
-// velocidad de esa reaparición.
 const PASOS_REAPARICION_HEADER = 15;
 const MS_ENTRE_PASOS_REAPARICION_HEADER = 40;
 
-/**
- * En escritorio, page.js monta un canvas de partículas grande y
- * fijo a la página (cubre header + sección 2). En móvil ese NO se
- * monta; en su lugar, Hero monta acá su propio canvas de partículas
- * más chico y absoluto — queda acotado al recuadro del header
- * (gracias a `.seccion { position: relative; overflow: hidden }`),
- * así que nunca se ve sobre la sección 2.
- *
- * Optimización: mientras el header está FUERA de la vista (el
- * usuario ya scrolleó a la Sección 2), apagamos el splash (letras
- * amarillas, que tienen una animación infinita) y, en móvil/tablet,
- * las partículas propias del header — nada de esto se ve en ese
- * momento, así que no tiene sentido seguir gastando CPU/GPU en
- * animarlo. Al volver: el splash se reactiva DE UNA (togglear una
- * clase es instantáneo), y las partículas van reapareciendo de a
- * poco (mismo efecto ya usado para el popup).
- */
 export default function Hero({ particulasMovil = false, cantidadParticulasMovil = 15 }) {
   const [refHeader, enVista] = useEnVista();
   const particulasApiRef = useRef(null);
   const estabaEnVistaRef = useRef(true);
+
+  const {
+    particulasApagadas,
+    animacionesApagadas,
+    setParticulasApagadas,
+    setAnimacionesApagadas,
+  } = useConfiguracionContext();
 
   useEffect(() => {
     const api = particulasApiRef.current;
@@ -73,10 +60,39 @@ export default function Hero({ particulasMovil = false, cantidadParticulasMovil 
     };
   }, [enVista, cantidadParticulasMovil]);
 
+  const [burbujaActiva, setBurbujaActiva] = useState(null);
+  const filaBotonesRef = useRef(null);
+
+  const alternarBurbuja = (nombre) => {
+    setBurbujaActiva((actual) => (actual === nombre ? null : nombre));
+  };
+
+  useEffect(() => {
+    if (!burbujaActiva) return;
+
+    const cerrarSiEsAfuera = (e) => {
+      if (filaBotonesRef.current && !filaBotonesRef.current.contains(e.target)) {
+        setBurbujaActiva(null);
+      }
+    };
+    const cerrarConEscape = (e) => {
+      if (e.key === "Escape") setBurbujaActiva(null);
+    };
+
+    document.addEventListener("pointerdown", cerrarSiEsAfuera);
+    window.addEventListener("keydown", cerrarConEscape);
+    return () => {
+      document.removeEventListener("pointerdown", cerrarSiEsAfuera);
+      window.removeEventListener("keydown", cerrarConEscape);
+    };
+  }, [burbujaActiva]);
+
   return (
     <header
       ref={refHeader}
-      className={`seccion seccion-hero${enVista ? "" : " header-fuera-de-vista"}`}
+      className={`seccion seccion-hero${enVista ? "" : " header-fuera-de-vista"}${
+        animacionesApagadas ? " animaciones-apagadas" : ""
+      }`}
     >
       {particulasMovil && (
         <Particles
@@ -98,18 +114,75 @@ export default function Hero({ particulasMovil = false, cantidadParticulasMovil 
 
         <div className="menu-minecraft">
           <a href="#seccion-marcadores" className="btn-mc btn-largo">Encantar!</a>
-          <button className="btn-mc btn-largo">Multiplayer</button>
-          <button className="btn-mc btn-largo">Minecraft Realms</button>
+          <button className="btn-mc btn-largo">Descargar PDF</button>
+          <button className="btn-mc btn-largo">Java Edition Soon</button>
 
-          <div className="fila-botones-inferior">
-            <button className="btn-mc btn-cuadrado" aria-label="Language">
-              🌍
-            </button>
-            <button className="btn-mc btn-mitad">Opciones...</button>
-            <button className="btn-mc btn-mitad">Contacto...</button>
-            <button className="btn-mc btn-cuadrado" aria-label="Accessibility">
-              ♿
-            </button>
+          <div className="fila-botones-inferior" ref={filaBotonesRef}>
+            <div className="boton-con-burbuja">
+              <button
+                type="button"
+                className="btn-mc btn-cuadrado"
+                aria-label="Idioma"
+                onClick={() => alternarBurbuja("idioma")}
+              >
+                🌍
+              </button>
+              <Burbuja abierta={burbujaActiva === "idioma"} posicion="arriba-izquierda">
+                <p className="burbuja-placeholder">Próximamente</p>
+              </Burbuja>
+            </div>
+
+            <div className="grupo-central">
+              <button
+                type="button"
+                className="btn-mc btn-mitad"
+                onClick={() => alternarBurbuja("opciones")}
+              >
+                Opciones...
+              </button>
+              <button
+                type="button"
+                className="btn-mc btn-mitad"
+                onClick={() => alternarBurbuja("contacto")}
+              >
+                Contacto...
+              </button>
+
+             <Burbuja abierta={burbujaActiva === "opciones"} posicion="abajo">
+                <button
+                  type="button"
+                  className="btn-mc burbuja-boton"
+                  onClick={() => setParticulasApagadas(!particulasApagadas)}
+                >
+                  {particulasApagadas ? "Activar partículas" : "Apagar partículas"}
+                </button>
+                <button
+                  type="button"
+                  className="btn-mc burbuja-boton"
+                  onClick={() => setAnimacionesApagadas(!animacionesApagadas)}
+                >
+                  {animacionesApagadas ? "Activar animaciones" : "Apagar animaciones"}
+                </button>
+              </Burbuja>
+
+              <Burbuja abierta={burbujaActiva === "contacto"} posicion="abajo">
+                <p className="burbuja-placeholder">Próximamente</p>
+              </Burbuja>
+            </div>
+
+            <div className="boton-con-burbuja">
+              <button
+                type="button"
+                className="btn-mc btn-cuadrado"
+                aria-label="Música"
+                onClick={() => alternarBurbuja("musica")}
+              >
+                🎵
+              </button>
+              <Burbuja abierta={burbujaActiva === "musica"} posicion="arriba-derecha">
+                <p className="burbuja-placeholder">Próximamente</p>
+              </Burbuja>
+            </div>
           </div>
         </div>
       </div>

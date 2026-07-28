@@ -21,6 +21,7 @@ import { useEsMovil } from "./hooks/useEsMovil";
 import { useEsTactil } from "./hooks/useEsTactil";
 import { useTeclaE } from "./hooks/useTeclaE";
 import { useBloquearSeleccionTotal } from "./hooks/useBloquearSeleccionTotal";
+import { useConfiguracionContext } from "./context/ConfiguracionContext";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -46,6 +47,7 @@ const ANCHO_MOVIL_PARTICULAS = 768;
 
 export default function Home() {
   const particulasApiRef = useRef(null);
+  const { particulasApagadas } = useConfiguracionContext();
 
   const { popup, abrirPopup, cerrarPopup, idEnOrigen, moverItem, posiciones, siguienteCasilleroDesdeAbajo } =
     useInventoryPopup(ITEMS, CASILLAS_HOTBAR);
@@ -73,36 +75,18 @@ export default function Home() {
 
   useBloquearSeleccionTotal();
 
-  // Ancho de pantalla "móvil" (independiente de la orientación). En
-  // escritorio (esMovil === false) montamos el canvas de partículas
-  // "grande" (fixed, cubre header + sección 2, ver más abajo). En
-  // móvil (esMovil === true) NO montamos ese, pero Hero sí monta su
-  // propio canvas de partículas más chico, acotado solo al header
-  // (ver prop `particulasMovil` de Hero).
+  // Ancho de pantalla "móvil" (independiente de la orientación).
   const esMovil = useEsMovil(ANCHO_MOVIL_PARTICULAS);
 
-  // Dispositivo táctil (pointer: coarse) sin importar el ancho: una
-  // tablet en horizontal puede medir más que ANCHO_MOVIL_PARTICULAS
-  // y aun así seguir siendo táctil. Sin esto, esas tablets caían en
-  // la rama "escritorio" de acá abajo (esMovil === false) y las
-  // partículas de Hero/Hud (PARTICULAS_MOVIL / PARTICULAS_MOVIL_SECCION2)
-  // quedaban montadas en 0 dispositivos: por eso al tocar esos
-  // números "no subían ni bajaban" en tablet.
+  // Dispositivo táctil (pointer: coarse) sin importar el ancho
   const esTactil = useEsTactil();
 
-  // 👈 ACÁ es donde se decide, en JS, si usamos el modo "partículas
-  // chicas de Hero/Hud" (móvil o tablet) o el modo "canvas grande de
-  // escritorio": basta con que se cumpla CUALQUIERA de los dos
-  // criterios (ancho angosto O dispositivo táctil).
-  const modoParticulasMovil = esMovil === true || esTactil === true;
-  const modoParticulasEscritorio = esMovil === false && esTactil === false;
+  const esDispositivoMovil = esMovil === true || esTactil === true;
+  const esDispositivoEscritorio = esMovil === false && esTactil === false;
 
-  // Al abrir el popup (en PC, donde SÍ hay partículas montadas): las
-  // pausamos in situ — dejan de moverse pero siguen dibujadas donde
-  // estaban, no se ocultan — para no gastar CPU en la física mientras
-  // se usa la mesa de encantamientos. Al cerrarlo, se despausan y
-  // retoman el movimiento desde ahí mismo: sin ningún efecto de
-  // "reaparición".
+  const modoParticulasMovil = esDispositivoMovil && !particulasApagadas;
+  const modoParticulasEscritorio = esDispositivoEscritorio && !particulasApagadas;
+
   useEffect(() => {
     const api = particulasApiRef.current;
     if (!api) return; // no hay partículas montadas (estamos en móvil)
@@ -126,7 +110,7 @@ export default function Home() {
         posiciones={posiciones}
         casillasHotbar={CASILLAS_HOTBAR}
         popupAbierto={Boolean(popup)}
-        mostrarAviso={!avisoVisto && modoParticulasEscritorio}
+        mostrarAviso={!avisoVisto && esDispositivoEscritorio}
         onSelectItem={abrirPopup}
         particulasMovil={modoParticulasMovil}
         cantidadParticulasMovil={PARTICULAS_MOVIL_SECCION2}
