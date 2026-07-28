@@ -18,6 +18,27 @@
   width: 100%;
 }
 
+.burbuja-boton--activo {
+  background-color: #7994cd;
+  color: #ffff55;
+  text-shadow: 2px 2px 0px #3f3f00;
+}
+
+.burbuja-volumen {
+  width: 100%;
+  accent-color: #4c4c4c;
+  cursor: pointer;
+}
+
+.burbuja-pistas {
+  display: flex;
+  gap: 8px;
+}
+
+.burbuja-boton-mitad {
+  flex: 1;
+}
+
 .burbuja-placeholder {
   margin: 0;
   text-align: center;
@@ -26,81 +47,121 @@
   color: #cfcfcf;
 }
 
-.burbuja-puntita {
-  position: absolute;
-  width: 0;
-  height: 0;
-  pointer-events: none;
-}
-
-.burbuja-puntita::before,
-.burbuja-puntita::after {
-  content: "";
-  position: absolute;
-  width: 0;
-  height: 0;
-  border-left: 10px solid transparent;
-  border-right: 10px solid transparent;
-}
-
 .burbuja--abajo {
   top: calc(100% + 12px);
   left: 0;
   right: 0;
   width: 100%;
 }
-.burbuja--abajo .burbuja-puntita {
-  top: -12px;
-  left: 50%;
-  transform: translateX(-50%);
-}
-.burbuja--abajo .burbuja-puntita::before {
-  top: -2px;
-  border-bottom: 12px solid #000000;
-}
-.burbuja--abajo .burbuja-puntita::after {
-  top: 0;
-  border-bottom: 10px solid #3b3b3b;
-}
 
-.burbuja--arriba-izquierda {
-  bottom: calc(100% + 12px);
-  left: 0;
+.burbuja--izquierda {
+  top: 50%;
+  right: calc(100% + 12px);
+  transform: translateY(-50%);
   min-width: 170px;
 }
-.burbuja--arriba-izquierda .burbuja-puntita {
-  bottom: -12px;
-  left: 16px;
-}
-.burbuja--arriba-izquierda .burbuja-puntita::before {
-  bottom: -2px;
-  border-top: 12px solid #000000;
-}
-.burbuja--arriba-izquierda .burbuja-puntita::after {
-  bottom: 0;
-  border-top: 10px solid #3b3b3b;
-}
 
-.burbuja--arriba-derecha {
-  bottom: calc(100% + 12px);
-  right: 0;
+.burbuja--derecha {
+  top: 50%;
+  left: calc(100% + 12px);
+  transform: translateY(-50%);
   min-width: 170px;
-}
-.burbuja--arriba-derecha .burbuja-puntita {
-  bottom: -12px;
-  right: 16px;
-}
-.burbuja--arriba-derecha .burbuja-puntita::before {
-  bottom: -2px;
-  border-top: 12px solid #000000;
-}
-.burbuja--arriba-derecha .burbuja-puntita::after {
-  bottom: 0;
-  border-top: 10px solid #3b3b3b;
 }
 
 @media (max-width: 480px) {
   .burbuja {
     padding: 8px;
+  }
+
+  /* Idioma/Música: en vez de quedar centradas verticalmente contra el
+     botón, se suben para que la parte de ABAJO del recuadro quede
+     alineada con la parte de abajo del botoncito. Como no hay "top"
+     fijo, el recuadro crece hacia arriba solo según su contenido
+     (por eso al agregar más idiomas se va a ajustar el tamaño solo). */
+  .burbuja--izquierda,
+  .burbuja--derecha {
+    top: auto;
+    bottom: 0;
+    transform: none;
+  }
+
+  /* Opciones/Contacto: en vez de abrir "abajo" (ancho completo), se
+     abren de costado (Opciones a la izquierda, Contacto a la derecha)
+     con un alto fijo para calzar con los 3 botones largos de arriba.
+     ▼▼▼ ACÁ SE AJUSTAN LOS VALORES ▼▼▼
+     --burbuja-lateral-alto   → alto del recuadro (probá hasta que
+                                 quede igual al alto de los 3 botones
+                                 largos + los gaps entre ellos).
+     --burbuja-lateral-arriba → cuánto sube el recuadro desde la fila
+                                 de botones (número negativo = hacia
+                                 arriba) para que el borde de ARRIBA
+                                 del recuadro quede a la altura del
+                                 borde de arriba de "Encantar!". */
+  .grupo-central {
+    --burbuja-lateral-alto: 170px;
+    --burbuja-lateral-arriba: -140px;
+  }
+
+  .burbuja--abajo.burbuja-opciones,
+  .burbuja--abajo.burbuja-contacto {
+    top: var(--burbuja-lateral-arriba);
+    bottom: auto;
+    width: 140px;
+    height: var(--burbuja-lateral-alto);
+    transform: none;
+  }
+  .burbuja--abajo.burbuja-opciones .burbuja-contenido,
+  .burbuja--abajo.burbuja-contacto .burbuja-contenido {
+    height: 100%;
+    justify-content: space-evenly;
+  }
+
+  .burbuja--abajo.burbuja-opciones {
+    right: calc(100% + 8px);
+    left: auto;
+  }
+
+  .burbuja--abajo.burbuja-contacto {
+    left: calc(100% + 8px);
+    right: auto;
+  }
+}
+
+/* MÓVIL/TABLET HORIZONTAL — mismo criterio que arriba, valores propios */
+@media (pointer: coarse) and (orientation: landscape) {
+  .burbuja--izquierda,
+  .burbuja--derecha {
+    top: auto;
+    bottom: 0;
+    transform: none;
+  }
+
+  .grupo-central {
+    --burbuja-lateral-alto: 150px;
+    --burbuja-lateral-arriba: -110px;
+  }
+
+  .burbuja--abajo.burbuja-opciones,
+  .burbuja--abajo.burbuja-contacto {
+    top: var(--burbuja-lateral-arriba);
+    bottom: auto;
+    width: 150px;
+    height: var(--burbuja-lateral-alto);
+    transform: none;
+  }
+  .burbuja--abajo.burbuja-opciones .burbuja-contenido,
+  .burbuja--abajo.burbuja-contacto .burbuja-contenido {
+    height: 100%;
+    justify-content: space-evenly;
+  }
+
+  .burbuja--abajo.burbuja-opciones {
+    right: calc(100% + 8px);
+    left: auto;
+  }
+
+  .burbuja--abajo.burbuja-contacto {
+    left: calc(100% + 8px);
+    right: auto;
   }
 }

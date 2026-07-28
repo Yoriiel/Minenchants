@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -12,7 +12,7 @@ import DragGhost from "./components/DragGhost";
 import GiroDispositivo from "./components/GiroDispositivo";
 import VueloItem from "./components/VueloItem";
 
-import { ITEMS, ITEMS_POR_ID } from "./data/items";
+import { ITEMS, traducirItemsPorId } from "./data/items";
 import { useInventoryPopup } from "./hooks/useInventoryPopup";
 import { useDragAndDrop } from "./hooks/useDragAndDrop";
 import { useOrientacionMovil } from "./hooks/useOrientacionMovil";
@@ -22,6 +22,7 @@ import { useEsTactil } from "./hooks/useEsTactil";
 import { useTeclaE } from "./hooks/useTeclaE";
 import { useBloquearSeleccionTotal } from "./hooks/useBloquearSeleccionTotal";
 import { useConfiguracionContext } from "./context/ConfiguracionContext";
+import { useIdioma } from "./context/IdiomaContext";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -48,6 +49,11 @@ const ANCHO_MOVIL_PARTICULAS = 768;
 export default function Home() {
   const particulasApiRef = useRef(null);
   const { particulasApagadas } = useConfiguracionContext();
+  const { idioma } = useIdioma();
+
+  // Catálogo de ítems en el idioma actual (títulos y encantamientos).
+  // Se recalcula solo cuando cambia el idioma, no en cada render.
+  const itemsPorId = useMemo(() => traducirItemsPorId(idioma), [idioma]);
 
   const { popup, abrirPopup, cerrarPopup, idEnOrigen, moverItem, posiciones, siguienteCasilleroDesdeAbajo } =
     useInventoryPopup(ITEMS, CASILLAS_HOTBAR);
@@ -106,7 +112,7 @@ export default function Home() {
       <Hero particulasMovil={modoParticulasMovil} cantidadParticulasMovil={PARTICULAS_MOVIL} />
 
       <Hud
-        itemsPorId={ITEMS_POR_ID}
+        itemsPorId={itemsPorId}
         posiciones={posiciones}
         casillasHotbar={CASILLAS_HOTBAR}
         popupAbierto={Boolean(popup)}
@@ -118,7 +124,7 @@ export default function Home() {
 
       {popup && (
         <InventoryPopup
-          itemsPorId={ITEMS_POR_ID}
+          itemsPorId={itemsPorId}
           idEnOrigen={idEnOrigen}
           moverConAnimacion={moverConAnimacion}
           siguienteCasilleroDesdeAbajo={siguienteCasilleroDesdeAbajo}
@@ -135,13 +141,13 @@ export default function Home() {
       {arrastre && (
         <DragGhost
           ref={fantasmaRef}
-          item={ITEMS_POR_ID[arrastre.id]}
+          item={itemsPorId[arrastre.id]}
           posicionInicial={ultimaPosRef.current}
         />
       )}
 
       {vuelos.map((v) => (
-        <VueloItem key={v.key} item={ITEMS_POR_ID[v.id]} from={v.from} to={v.to} />
+        <VueloItem key={v.key} item={itemsPorId[v.id]} from={v.from} to={v.to} />
       ))}
 
       {necesitaGirar && <GiroDispositivo />}

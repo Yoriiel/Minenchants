@@ -1,11 +1,13 @@
 "use client";
 
-export default function Burbuja({ abierta, posicion = "abajo", children }) {
+export default function Burbuja({ abierta, posicion = "abajo", claseExtra, children }) {
   if (!abierta) return null;
 
+  const clases = ["burbuja", `burbuja--${posicion}`];
+  if (claseExtra) clases.push(claseExtra);
+
   return (
-    <div className={`burbuja burbuja--${posicion}`} role="menu">
-      <span className="burbuja-puntita" aria-hidden="true" />
+    <div className={clases.join(" ")} role="menu">
       <div className="burbuja-contenido">{children}</div>
     </div>
   );

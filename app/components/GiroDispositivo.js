@@ -1,10 +1,10 @@
-/**
- * Aviso a pantalla completa que tapa el popup cuando el usuario está
- * en un celular en modo vertical: le pide girarlo. Desaparece solo
- * cuando el dispositivo pasa a horizontal (lo controla el hook
- * useOrientacionMovil desde page.js, este componente es solo visual).
- */
+"use client";
+
+import { useIdioma } from "../context/IdiomaContext";
+
 export default function GiroDispositivo() {
+  const { t } = useIdioma();
+
   return (
     <div className="giro-fondo" role="alert">
       <svg className="giro-icono" viewBox="0 0 100 100" aria-hidden="true">
@@ -20,7 +20,7 @@ export default function GiroDispositivo() {
         />
         <circle cx="50" cy="72" r="2.5" fill="#ffffff" />
       </svg>
-      <p className="giro-texto">Girá tu teléfono para ver la web</p>
+      <p className="giro-texto">{t("giraTuTelefono")}</p>
     </div>
   );
 }

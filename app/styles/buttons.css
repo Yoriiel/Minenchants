@@ -19,7 +19,7 @@
   font-size: 0.80rem;
   font-weight: bold;
   text-shadow: 2px 2px 0px #3f3f3f;
-  padding: 10px 0;
+  padding: 15px 0;
   cursor: pointer;
   user-select: none;
 }
@@ -60,7 +60,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0;
+  padding: 0.5rem;
 }
 
 .boton-con-burbuja {
@@ -84,7 +84,7 @@
   }
   .btn-mc {
     font-size: 0.8rem;
-    padding: 7px 0;
+    padding: 7px 15px; /* 👈 AQUÍ: 7px arriba/abajo y 15px a los lados */
   }
   .btn-cuadrado {
     width: 34px;
@@ -105,7 +105,7 @@
   }
   .btn-mc {
     font-size: clamp(0.55rem, 1.2vh, 0.85rem);
-    padding: 1.9vh 0;
+    padding: 1.9vh 2vh; /* 👈 AQUÍ: Ajusta el segundo valor según prefieras */
   }
   .btn-cuadrado {
     width: clamp(40px, 6vh, 40px);
@@ -113,7 +113,7 @@
   }
   .fila-botones-inferior {
     margin-top: 3.0vh;
-    gap: 3vh;
+    gap: 3.0vh;
     display: flex;
     justify-content: center;
   }

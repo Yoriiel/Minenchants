@@ -1,5 +1,8 @@
+"use client";
+
 import Particles from "./Particles";
 import ItemImagen from "./ItemImagen";
+import { useIdioma } from "../context/IdiomaContext";
 
 const HOTBAR_INICIO = 27;
 
@@ -13,6 +16,8 @@ export default function Hud({
   particulasMovil = false,
   cantidadParticulasMovil = 12,
 }) {
+  const { t } = useIdioma();
+
   // Invertimos posiciones -> qué idItem hay en cada casillero de la hotbar.
   const idsPorCasillero = {};
   for (const idItem in posiciones) {
@@ -33,7 +38,7 @@ export default function Hud({
           type="button"
           className="btn-mc btn-cuadrado hud-boton-menu"
           onClick={() => onSelectItem()}
-          aria-label="Abrir inventario"
+          aria-label={t("abrirInventarioAria")}
         >
           <span aria-hidden="true">&bull;&bull;&bull;</span>
         </button>
@@ -41,13 +46,13 @@ export default function Hud({
 
       {mostrarAviso && (
         <p className="hud-aviso-tecla-e" aria-hidden="true">
-          Presiona la tecla &quot;E&quot;
+          {t("avisoTeclaELinea1")}
           <br />
-          para abrir el inventario
+          {t("avisoTeclaELinea2")}
         </p>
       )}
 
-      <div className="hud" aria-label="Inventario de equipamiento">
+      <div className="hud" aria-label={t("inventarioAria")}>
         <div className="hud-barras">
           <div className="hud-fila-iconos">
             <div className="hud-grupo-izquierda">
@@ -79,6 +84,9 @@ export default function Hud({
             // acá lo "apagamos" (ni lo mostramos ni queda clickeable),
             // y al desmontar el <img> el gif deja de ocupar memoria.
             const item = !popupAbierto && idItem ? itemsPorId[idItem] : null;
+            const etiqueta = item
+              ? t("verEncantamientosDe").replace("{titulo}", item.titulo)
+              : t("casillaVacia");
             return (
               <button
                 key={idItem ?? `vacio-${i}`} 
@@ -86,7 +94,7 @@ export default function Hud({
                 className="hud-casilla"
                 disabled={!item}
                 onClick={() => item && onSelectItem(item)}
-                aria-label={item ? `Ver encantamientos de ${item.titulo}` : "Casilla vacía"}
+                aria-label={etiqueta}
               >
                 {item && <ItemImagen src={item.img} alt={item.titulo} />}
               </button>

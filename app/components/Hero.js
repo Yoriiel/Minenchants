@@ -4,7 +4,9 @@ import { useEffect, useRef, useState } from "react";
 import Particles from "./Particles";
 import Burbuja from "./Burbuja";
 import { useEnVista } from "../hooks/useEnVista";
+import { useMusicPlayer } from "../hooks/useMusicPlayer";
 import { useConfiguracionContext } from "../context/ConfiguracionContext";
+import { useIdioma } from "../context/IdiomaContext";
 
 const PASOS_REAPARICION_HEADER = 15;
 const MS_ENTRE_PASOS_REAPARICION_HEADER = 40;
@@ -20,6 +22,17 @@ export default function Hero({ particulasMovil = false, cantidadParticulasMovil 
     setParticulasApagadas,
     setAnimacionesApagadas,
   } = useConfiguracionContext();
+
+  const { idioma, setIdioma, t } = useIdioma();
+
+  const {
+    activo: musicaActiva,
+    volumen: volumenMusica,
+    alternarActivo: alternarMusica,
+    cambiarVolumen: cambiarVolumenMusica,
+    pistaSiguiente,
+    pistaAnterior,
+  } = useMusicPlayer();
 
   useEffect(() => {
     const api = particulasApiRef.current;
@@ -109,26 +122,39 @@ export default function Hero({ particulasMovil = false, cantidadParticulasMovil 
             alt="Minenchants Bedrock Edition"
             className="hero-logo"
           />
-          <span className="texto-splash">Estos son los Mejores!</span>
+          <span className="texto-splash">{t("splash")}</span>
         </div>
 
         <div className="menu-minecraft">
-          <a href="#seccion-marcadores" className="btn-mc btn-largo">Encantar!</a>
-          <button className="btn-mc btn-largo">Descargar PDF</button>
-          <button className="btn-mc btn-largo">Java Edition Soon</button>
+          <a href="#seccion-marcadores" className="btn-mc btn-largo">{t("encantar")}</a>
+          <button className="btn-mc btn-largo">{t("descargarPdf")}</button>
+          <button className="btn-mc btn-largo">{t("javaEdition")}</button>
 
           <div className="fila-botones-inferior" ref={filaBotonesRef}>
             <div className="boton-con-burbuja">
               <button
                 type="button"
                 className="btn-mc btn-cuadrado"
-                aria-label="Idioma"
+                aria-label={t("idiomaAria")}
                 onClick={() => alternarBurbuja("idioma")}
               >
                 🌍
               </button>
-              <Burbuja abierta={burbujaActiva === "idioma"} posicion="arriba-izquierda">
-                <p className="burbuja-placeholder">Próximamente</p>
+              <Burbuja abierta={burbujaActiva === "idioma"} posicion="izquierda">
+                <button
+                  type="button"
+                  className={`btn-mc burbuja-boton${idioma === "es" ? " burbuja-boton--activo" : ""}`}
+                  onClick={() => setIdioma("es")}
+                >
+                  Español
+                </button>
+                <button
+                  type="button"
+                  className={`btn-mc burbuja-boton${idioma === "en" ? " burbuja-boton--activo" : ""}`}
+                  onClick={() => setIdioma("en")}
+                >
+                  English
+                </button>
               </Burbuja>
             </div>
 
@@ -138,35 +164,48 @@ export default function Hero({ particulasMovil = false, cantidadParticulasMovil 
                 className="btn-mc btn-mitad"
                 onClick={() => alternarBurbuja("opciones")}
               >
-                Opciones...
+                {t("opciones")}
               </button>
               <button
                 type="button"
                 className="btn-mc btn-mitad"
                 onClick={() => alternarBurbuja("contacto")}
               >
-                Contacto...
+                {t("contacto")}
               </button>
 
-             <Burbuja abierta={burbujaActiva === "opciones"} posicion="abajo">
+             <Burbuja abierta={burbujaActiva === "opciones"} posicion="abajo" claseExtra="burbuja-opciones">
                 <button
                   type="button"
                   className="btn-mc burbuja-boton"
                   onClick={() => setParticulasApagadas(!particulasApagadas)}
                 >
-                  {particulasApagadas ? "Activar partículas" : "Apagar partículas"}
+                  {particulasApagadas ? t("activarParticulas") : t("apagarParticulas")}
                 </button>
                 <button
                   type="button"
                   className="btn-mc burbuja-boton"
                   onClick={() => setAnimacionesApagadas(!animacionesApagadas)}
                 >
-                  {animacionesApagadas ? "Activar animaciones" : "Apagar animaciones"}
+                  {animacionesApagadas ? t("activarAnimaciones") : t("apagarAnimaciones")}
                 </button>
               </Burbuja>
 
-              <Burbuja abierta={burbujaActiva === "contacto"} posicion="abajo">
-                <p className="burbuja-placeholder">Próximamente</p>
+              <Burbuja abierta={burbujaActiva === "contacto"} posicion="abajo" claseExtra="burbuja-contacto">
+                <a
+                  href="https://github.com/Yoriiel/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-mc burbuja-boton"
+                >
+                  {t("github")}
+                </a>
+                <a
+                  href="mailto:yoriiel.gonzalez@gmail.com"
+                  className="btn-mc burbuja-boton"
+                >
+                  {t("email")}
+                </a>
               </Burbuja>
             </div>
 
@@ -174,13 +213,46 @@ export default function Hero({ particulasMovil = false, cantidadParticulasMovil 
               <button
                 type="button"
                 className="btn-mc btn-cuadrado"
-                aria-label="Música"
+                aria-label={t("musicaAria")}
                 onClick={() => alternarBurbuja("musica")}
               >
                 🎵
               </button>
-              <Burbuja abierta={burbujaActiva === "musica"} posicion="arriba-derecha">
-                <p className="burbuja-placeholder">Próximamente</p>
+              <Burbuja abierta={burbujaActiva === "musica"} posicion="derecha">
+                <button
+                  type="button"
+                  className="btn-mc burbuja-boton"
+                  onClick={alternarMusica}
+                >
+                  {musicaActiva ? t("desactivarMusica") : t("activarMusica")}
+                </button>
+                <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  value={volumenMusica}
+                  onChange={(e) => cambiarVolumenMusica(Number(e.target.value))}
+                  className="burbuja-volumen"
+                  aria-label={t("volumenAria")}
+                />
+                <div className="burbuja-pistas">
+                  <button
+                    type="button"
+                    className="btn-mc burbuja-boton-mitad"
+                    onClick={pistaAnterior}
+                    aria-label={t("pistaAnteriorAria")}
+                  >
+                    ◀
+                  </button>
+                  <button
+                    type="button"
+                    className="btn-mc burbuja-boton-mitad"
+                    onClick={pistaSiguiente}
+                    aria-label={t("pistaSiguienteAria")}
+                  >
+                    ▶
+                  </button>
+                </div>
               </Burbuja>
             </div>
           </div>

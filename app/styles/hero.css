@@ -65,6 +65,7 @@
 
 .animaciones-apagadas .texto-splash {
   animation: none;
+  transform: rotate(-20deg);
 }
 
 /* MÓVIL VERTICAL */
