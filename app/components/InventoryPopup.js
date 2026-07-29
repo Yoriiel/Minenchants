@@ -31,25 +31,41 @@ export default function InventoryPopup({
     const item = id ? itemsPorId[id] : null;
     const oculto = arrastre?.origen === origen || ocultosVuelo.has(origen);
 
+    // Atajo para mover un ítem desde/hacia la casilla principal, sin
+    // pasar por el drag & drop normal. Antes solo se activaba con
+    // Ctrl+click; ahora también con doble click izquierdo (misma
+    // lógica exacta para los dos casos).
+    const dispararAtajo = () => {
+      if (origen === "principal") {
+        // El ítem de la principal sale a la primera casilla libre
+        // desde abajo hacia arriba, izquierda a derecha.
+        const destino = siguienteCasilleroDesdeAbajo();
+        if (destino !== null) moverConAnimacion("principal", destino);
+      } else {
+        // Cualquier otro ítem salta directo a la principal (si ya
+        // había algo ahí, se intercambian). Si la casilla está vacía
+        // o el ítem es de relleno, moverConAnimacion no hace nada.
+        moverConAnimacion(origen, "principal");
+      }
+    };
+
     const onPointerDown = (e) => {
       // Ctrl+click: atajo aparte del drag & drop normal (no pasa por
       // iniciarArrastre), con la misma animación de "vuelo" que la
       // selección con Shift/toque.
       if (e.ctrlKey) {
         e.preventDefault();
-        if (origen === "principal") {
-          // El ítem de la principal sale a la primera casilla libre
-          // desde abajo hacia arriba, izquierda a derecha.
-          const destino = siguienteCasilleroDesdeAbajo();
-          if (destino !== null) moverConAnimacion("principal", destino);
-        } else {
-          // Cualquier otro ítem salta directo a la principal (si ya
-          // había algo ahí, se intercambian).
-          moverConAnimacion(origen, "principal");
-        }
+        dispararAtajo();
         return;
       }
       iniciarArrastre(e, origen);
+    };
+
+    // Doble click izquierdo: mismo atajo que Ctrl+click, para quien
+    // prefiera no usar el teclado.
+    const onDoubleClick = (e) => {
+      e.preventDefault();
+      dispararAtajo();
     };
 
     return (
@@ -61,6 +77,7 @@ export default function InventoryPopup({
         oculto={oculto}
         seleccionado={seleccionado === origen}
         onPointerDown={onPointerDown}
+        onDoubleClick={onDoubleClick}
       />
     );
   };

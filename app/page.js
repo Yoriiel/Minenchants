@@ -13,6 +13,7 @@ import GiroDispositivo from "./components/GiroDispositivo";
 import VueloItem from "./components/VueloItem";
 
 import { ITEMS, traducirItemsPorId } from "./data/items";
+import { RELLENO_ITEMS, RELLENO_ITEMS_POR_ID } from "./data/rellenoItems";
 import { useInventoryPopup } from "./hooks/useInventoryPopup";
 import { useDragAndDrop } from "./hooks/useDragAndDrop";
 import { useOrientacionMovil } from "./hooks/useOrientacionMovil";
@@ -53,10 +54,26 @@ export default function Home() {
 
   // Catálogo de ítems en el idioma actual (títulos y encantamientos).
   // Se recalcula solo cuando cambia el idioma, no en cada render.
-  const itemsPorId = useMemo(() => traducirItemsPorId(idioma), [idioma]);
+  // Los ítems de RELLENO no tienen traducción (son solo decorativos,
+  // ver rellenoItems.js) así que se agregan tal cual, ya mezclados en
+  // el mismo objeto — así cualquier componente (Hud, InventoryPopup)
+  // puede resolver CUALQUIER id, sea real o de relleno, de la misma
+  // forma: itemsPorId[id].
+  const itemsPorId = useMemo(
+    () => ({ ...traducirItemsPorId(idioma), ...RELLENO_ITEMS_POR_ID }),
+    [idioma]
+  );
 
-  const { popup, abrirPopup, cerrarPopup, idEnOrigen, moverItem, posiciones, siguienteCasilleroDesdeAbajo } =
-    useInventoryPopup(ITEMS, CASILLAS_HOTBAR);
+  const {
+    popup,
+    abrirPopup,
+    cerrarPopup,
+    idEnOrigen,
+    moverItem,
+    posiciones,
+    siguienteCasilleroDesdeAbajo,
+    esRelleno,
+  } = useInventoryPopup(ITEMS, CASILLAS_HOTBAR, RELLENO_ITEMS);
 
   const { avisoVisto } = useTeclaE({
     popupAbierto: Boolean(popup),
@@ -69,6 +86,7 @@ export default function Home() {
       idEnOrigen,
       moverItem,
       popupAbierto: Boolean(popup),
+      esRelleno,
     });
 
   const { arrastre, iniciarArrastre, fantasmaRef, ultimaPosRef } = useDragAndDrop({

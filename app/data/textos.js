@@ -34,6 +34,8 @@ export const TEXTOS = {
     confirmarDescargaTitulo: '¿Querés descargar el archivo "{nombre}"?',
     confirmarDescargaSi: "Descargar",
     confirmarDescargaNo: "Cancelar",
+    cambiarVersionAria: "Cambiar versión del ítem",
+    verVersionAria: "V {numero}",
   },
   en: {
     splash: "These are the Best!",
@@ -66,5 +68,7 @@ export const TEXTOS = {
     confirmarDescargaTitulo: 'Download the file "{nombre}"?',
     confirmarDescargaSi: "Download",
     confirmarDescargaNo: "Cancel",
+    cambiarVersionAria: "Change item version",
+    verVersionAria: "V {numero}",
   },
 };

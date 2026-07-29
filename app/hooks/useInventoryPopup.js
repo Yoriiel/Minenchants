@@ -25,15 +25,40 @@ function totalCasillas(casillasHotbar) {
   return TOTAL_GRID_PRINCIPAL + casillasHotbar;
 }
 
-// Estado inicial: cada ítem cae en la fila de abajo, en el mismo
-// orden en que aparece en el catálogo (ITEMS) — exactamente lo mismo
-// que ya se ve hoy en la barra HUD real. El grid principal (arriba)
-// arranca vacío.
-function generarPosicionesIniciales(items, casillasHotbar) {
+// Devuelve los casilleros (0..total-1) que NO están en `ocupados`,
+// en orden AL AZAR (shuffle Fisher-Yates). La usan tanto la posición
+// inicial de los ítems de relleno como el "completado" de ítems
+// nuevos que aparezcan en el catálogo después de que el usuario ya
+// tenía cosas guardadas en localStorage.
+function casillerosLibresBarajados(ocupados, total) {
+  const libres = [];
+  for (let i = 0; i < total; i++) {
+    if (!ocupados.has(i)) libres.push(i);
+  }
+  for (let i = libres.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [libres[i], libres[j]] = [libres[j], libres[i]];
+  }
+  return libres;
+}
+
+// Estado inicial (DETERMINÍSTICO — corre en servidor Y cliente, ver
+// nota grande más abajo sobre hidratación, así que NUNCA puede usar
+// Math.random() acá):
+//   - Ítems REALES (encantables): cada uno cae en la fila de abajo,
+//     en el mismo orden en que aparece en el catálogo (ITEMS) —
+//     exactamente lo mismo que ya se ve hoy en la barra HUD real.
+//   - Ítems de RELLENO (decorativos): caen en orden, en los
+//     casilleros libres que van quedando del grid principal (arriba).
+//     Este orden es solo un valor de arranque "seguro" para que
+//     servidor y cliente coincidan — el desorden real al azar que se
+//     ve la primera vez se arma aparte, ya en el cliente, con
+//     `barajarPosicionesRelleno` (ver el useLayoutEffect del hook).
+function generarPosicionesIniciales(itemsReales, casillasHotbar, itemsRelleno = []) {
   const inicio = hotbarInicio();
   const posiciones = {};
   let siguienteCasilleroArriba = 0;
-  items.forEach((item, idx) => {
+  itemsReales.forEach((item, idx) => {
     if (idx < casillasHotbar) {
       posiciones[item.id] = inicio + idx;
     } else {
@@ -43,28 +68,94 @@ function generarPosicionesIniciales(items, casillasHotbar) {
       siguienteCasilleroArriba++;
     }
   });
+
+  const total = totalCasillas(casillasHotbar);
+  itemsRelleno.forEach((item) => {
+    while (posiciones[item.id] === undefined) {
+      const candidato = siguienteCasilleroArriba;
+      siguienteCasilleroArriba++;
+      const ocupado = Object.values(posiciones).includes(candidato);
+      if (!ocupado && candidato < total) posiciones[item.id] = candidato;
+      if (candidato >= total) break; // no debería pasar
+    }
+  });
+
   return posiciones;
 }
 
-function cargarPosicionesGuardadas(items, casillasHotbar) {
+// Reparte AL AZAR (shuffle Fisher-Yates) los casilleros que hoy
+// ocupan los ítems de RELLENO entre ellos mismos, dejando intactos
+// los casilleros de los ítems reales. Se usa SOLO del lado del
+// cliente (dentro de useLayoutEffect, nunca en el useState inicial),
+// la primera vez que se abre el popup y no hay nada todavía guardado
+// en localStorage — así el desorden inicial es al azar, pero sin
+// arriesgar un mismatch de hidratación servidor/cliente.
+function barajarPosicionesRelleno(posiciones, itemsRelleno) {
+  const casilleros = itemsRelleno
+    .map((item) => posiciones[item.id])
+    .filter((c) => typeof c === "number");
+
+  const barajados = [...casilleros];
+  for (let i = barajados.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [barajados[i], barajados[j]] = [barajados[j], barajados[i]];
+  }
+
+  const siguiente = { ...posiciones };
+  itemsRelleno.forEach((item, idx) => {
+    if (idx < barajados.length) siguiente[item.id] = barajados[idx];
+  });
+  return siguiente;
+}
+
+// `itemsTodos` = ítems reales + de relleno juntos (ver más abajo,
+// donde se arma esa lista una sola vez dentro del hook).
+function cargarPosicionesGuardadas(itemsTodos, casillasHotbar) {
   if (typeof window === "undefined") return null;
   try {
     const guardado = window.localStorage.getItem(STORAGE_KEY);
     if (!guardado) return null;
     const posiciones = JSON.parse(guardado);
+    if (typeof posiciones !== "object" || posiciones === null) return null;
 
-    // Validamos que sea un objeto { idItem: numeroDeCasillero } con
-    // valores dentro del rango válido y sin dos ítems compartiendo
-    // casillero (por las dudas, si algo externo tocó el LocalStorage).
+    // Tomamos del guardado SOLO las entradas válidas (casillero
+    // numérico, dentro de rango, sin chocar con otra ya tomada). Los
+    // ítems que falten en el guardado (por ejemplo, los de relleno la
+    // primera vez que se carga esta actualización, o cualquier ítem
+    // nuevo que se agregue al catálogo más adelante) NO invalidan
+    // todo el guardado: se completan más abajo con un casillero libre
+    // al azar, sin tocar la posición de lo que el usuario ya tenía
+    // acomodado.
     const total = totalCasillas(casillasHotbar);
     const vistos = new Set();
-    for (const item of items) {
+    const resultado = {};
+    for (const item of itemsTodos) {
       const casillero = posiciones[item.id];
-      if (typeof casillero !== "number" || casillero < 0 || casillero >= total) return null;
-      if (vistos.has(casillero)) return null;
-      vistos.add(casillero);
+      if (
+        typeof casillero === "number" &&
+        casillero >= 0 &&
+        casillero < total &&
+        !vistos.has(casillero)
+      ) {
+        resultado[item.id] = casillero;
+        vistos.add(casillero);
+      }
     }
-    return posiciones;
+
+    // Si nada de lo guardado sirvió (ej. viene de un formato viejo
+    // totalmente distinto), mejor arrancar de cero con la posición
+    // inicial normal en vez de devolver un objeto vacío/incompleto.
+    if (Object.keys(resultado).length === 0) return null;
+
+    const faltantes = itemsTodos.filter((item) => !(item.id in resultado));
+    if (faltantes.length > 0) {
+      const libres = casillerosLibresBarajados(vistos, total);
+      faltantes.forEach((item, idx) => {
+        if (idx < libres.length) resultado[item.id] = libres[idx];
+      });
+    }
+
+    return resultado;
   } catch {
     return null;
   }
@@ -137,10 +228,18 @@ function primerCasilleroLibreDesdeAbajo(posiciones, casillasHotbar) {
  *     entrar ahí. Se usa para devolverlo a ese lugar al cerrar el
  *     popup (Parte 4).
  */
-export function useInventoryPopup(items, casillasHotbar) {
+export function useInventoryPopup(items, casillasHotbar, itemsRelleno = []) {
   const [abierto, setAbierto] = useState(false);
   const [principal, setPrincipal] = useState(null);
   const [principalUltimaPosicion, setPrincipalUltimaPosicion] = useState(null);
+
+  // Los ítems de relleno son solo decorativos: nunca pueden terminar
+  // en la casilla principal. Este Set se recalcula en cada render
+  // (es una lista chica, no hace falta memoizarlo) y lo usan tanto
+  // `moverItem` acá abajo como el propio consumidor del hook si
+  // necesita esRelleno(id) para algo más (ver Hud.js).
+  const idsRelleno = new Set(itemsRelleno.map((it) => it.id));
+  const esRelleno = (id) => idsRelleno.has(id);
 
   // OJO: este inicializador de useState corre tanto en el servidor
   // como en el cliente (durante la hidratación). Antes acá mismo se
@@ -157,9 +256,11 @@ export function useInventoryPopup(items, casillasHotbar) {
   // por defecto, así los dos coinciden. Lo guardado en localStorage
   // se aplica después, ya montados en el cliente (ver useLayoutEffect
   // más abajo), que es una actualización 100% del lado del cliente y
-  // no un choque servidor/cliente.
+  // no un choque servidor/cliente. Por la misma razón, acá los ítems
+  // de relleno arrancan en orden (NO al azar todavía) — el desorden
+  // real se arma dentro del useLayoutEffect, que es 100% cliente.
   const [posiciones, setPosiciones] = useState(() =>
-    generarPosicionesIniciales(items, casillasHotbar)
+    generarPosicionesIniciales(items, casillasHotbar, itemsRelleno)
   );
 
   // Aplica lo guardado en localStorage apenas se monta en el cliente.
@@ -167,11 +268,21 @@ export function useInventoryPopup(items, casillasHotbar) {
   // el navegador pinte el primer frame, y así no se alcance a ver un
   // parpadeo del orden por defecto antes de saltar al guardado.
   useLayoutEffect(() => {
-    const guardadas = cargarPosicionesGuardadas(items, casillasHotbar);
+    const itemsTodos = [...items, ...itemsRelleno];
+    const guardadas = cargarPosicionesGuardadas(itemsTodos, casillasHotbar);
     if (guardadas) {
       setPosiciones(guardadas);
     } else {
-      guardarPosiciones(generarPosicionesIniciales(items, casillasHotbar));
+      // Nada guardado todavía (primera visita): recién ACÁ, ya en el
+      // cliente, barajamos al azar los ítems de relleno entre los
+      // casilleros libres que les tocaron. A partir de este momento
+      // queda persistido, así que cualquier movimiento futuro del
+      // usuario (sobre relleno o sobre ítems reales) se guarda igual
+      // que siempre.
+      const inicial = generarPosicionesIniciales(items, casillasHotbar, itemsRelleno);
+      const conRellenoAlAzar = barajarPosicionesRelleno(inicial, itemsRelleno);
+      setPosiciones(conRellenoAlAzar);
+      guardarPosiciones(conRellenoAlAzar);
     }
     // Solo nos interesa correr esto una vez, al montar.
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -253,6 +364,15 @@ export function useInventoryPopup(items, casillasHotbar) {
 
     if (origen === "principal" && destino === "principal") return; // no debería pasar
 
+    // Los ítems de relleno son solo decorativos y NUNCA pueden entrar
+    // a la casilla principal: ni directo (destino === "principal" con
+    // el ítem de relleno viniendo de `origen`), ni por un intercambio
+    // donde la principal "libera" su ítem hacia una casilla que hoy
+    // ocupa un relleno (origen === "principal" y el de `destino` es
+    // relleno). En ambos casos, simplemente no hacemos nada.
+    if (destino === "principal" && esRelleno(idOrigen)) return;
+    if (origen === "principal" && idDestino && esRelleno(idDestino)) return;
+
     if (origen === "principal") {
       // El ítem que estaba en la principal pasa a ocupar `destino`.
       // Si `destino` tenía algo, eso pasa a ser lo nuevo en la principal.
@@ -307,5 +427,6 @@ export function useInventoryPopup(items, casillasHotbar) {
     moverItem,
     posiciones,
     siguienteCasilleroDesdeAbajo,
+    esRelleno,
   };
 }

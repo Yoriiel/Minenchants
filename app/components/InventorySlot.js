@@ -7,12 +7,14 @@ export default function InventorySlot({
   oculto,
   seleccionado,
   onPointerDown,
+  onDoubleClick,
 }) {
   return (
     <div
       className={esPrincipal ? "popup-casilla-principal" : "popup-casilla"}
       data-slot={origen}
       onPointerDown={onPointerDown}
+      onDoubleClick={onDoubleClick}
       style={{ touchAction: "none" }}
     >
       {item && (

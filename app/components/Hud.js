@@ -80,20 +80,21 @@ export default function Hud({
           {Array.from({ length: casillasHotbar }, (_, i) => {
             const casillero = HOTBAR_INICIO + i;
             const idItem = idsPorCasillero[casillero];
-            // Con el popup abierto, el mismo ítem ya se ve ahí adentro:
-            // acá lo "apagamos" (ni lo mostramos ni queda clickeable),
-            // y al desmontar el <img> el gif deja de ocupar memoria.
             const item = !popupAbierto && idItem ? itemsPorId[idItem] : null;
-            const etiqueta = item
-              ? t("verEncantamientosDe").replace("{titulo}", item.titulo)
-              : t("casillaVacia");
+
+            const esItemDeRelleno = Boolean(item?.relleno);
+            const etiqueta = !item
+              ? t("casillaVacia")
+              : esItemDeRelleno
+              ? t("abrirInventarioAria")
+              : t("verEncantamientosDe").replace("{titulo}", item.titulo);
             return (
               <button
                 key={idItem ?? `vacio-${i}`} 
                 type="button"
                 className="hud-casilla"
                 disabled={!item}
-                onClick={() => item && onSelectItem(item)}
+                onClick={() => item && onSelectItem(esItemDeRelleno ? undefined : item)}
                 aria-label={etiqueta}
               >
                 {item && <ItemImagen src={item.img} alt={item.titulo} />}
