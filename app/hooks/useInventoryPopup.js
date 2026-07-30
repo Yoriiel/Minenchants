@@ -239,7 +239,16 @@ export function useInventoryPopup(items, casillasHotbar, itemsRelleno = []) {
   // `moverItem` acá abajo como el propio consumidor del hook si
   // necesita esRelleno(id) para algo más (ver Hud.js).
   const idsRelleno = new Set(itemsRelleno.map((it) => it.id));
-  const esRelleno = (id) => idsRelleno.has(id);
+
+  // A diferencia de `itemsRelleno` (que llega ya armado desde el
+  // arranque), acá guardamos los ids de ítems que se suman DESPUÉS,
+  // en caliente, durante la sesión (ver `agregarItemSiNoExiste` más
+  // abajo — hoy lo usa el easter egg del diamante). Si ese ítem tenía
+  // `relleno: true`, su id termina también acá, para que `esRelleno`
+  // lo seleccione igual que a los de relleno "de toda la vida".
+  const [idsRellenoDinamicos, setIdsRellenoDinamicos] = useState(() => new Set());
+
+  const esRelleno = (id) => idsRelleno.has(id) || idsRellenoDinamicos.has(id);
 
   // OJO: este inicializador de useState corre tanto en el servidor
   // como en el cliente (durante la hidratación). Antes acá mismo se
@@ -419,6 +428,40 @@ export function useInventoryPopup(items, casillasHotbar, itemsRelleno = []) {
   const siguienteCasilleroDesdeAbajo = () =>
     primerCasilleroLibreDesdeAbajo(posiciones, casillasHotbar);
 
+  // Suma un ítem nuevo "en caliente" (fuera del arranque normal de
+  // items/itemsRelleno) al primer casillero libre, y lo deja
+  // persistido en localStorage como cualquier otro. Es IDEMPOTENTE:
+  // si el ítem ya está en `posiciones` (ya se había agregado antes,
+  // en esta sesión o en una anterior), no hace nada con la posición
+  // — pero si tiene `relleno: true`, igual nos aseguramos de que su
+  // id quede marcado en `idsRellenoDinamicos`, porque esa parte NO se
+  // persiste sola (se recalcula en cada carga de la página).
+  //
+  // La usa el easter egg del diamante (ver page.js): una vez al
+  // encontrarlo por primera vez, y de nuevo en cada carga posterior
+  // de la página si el usuario ya lo había encontrado antes (ahí no
+  // hace falta reasignarle casillero, solo "recordar" que sigue
+  // siendo relleno).
+  const agregarItemSiNoExiste = (item) => {
+    setPosiciones((prev) => {
+      if (item.id in prev) return prev;
+      const destino = primerCasilleroLibre(prev, casillasHotbar);
+      if (destino === null) return prev; // no debería pasar
+      const siguiente = { ...prev, [item.id]: destino };
+      guardarPosiciones(siguiente);
+      return siguiente;
+    });
+
+    if (item.relleno) {
+      setIdsRellenoDinamicos((prev) => {
+        if (prev.has(item.id)) return prev;
+        const siguiente = new Set(prev);
+        siguiente.add(item.id);
+        return siguiente;
+      });
+    }
+  };
+
   return {
     popup: abierto ? { principal } : null,
     abrirPopup,
@@ -428,5 +471,6 @@ export function useInventoryPopup(items, casillasHotbar, itemsRelleno = []) {
     posiciones,
     siguienteCasilleroDesdeAbajo,
     esRelleno,
+    agregarItemSiNoExiste,
   };
 }

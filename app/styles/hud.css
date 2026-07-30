@@ -3,6 +3,7 @@
 .seccion-marcadores {
   min-height: 100vh;
   position: relative;
+  overflow: hidden; /* recorta el diamante del easter egg que sobresale del borde derecho (ver .easter-egg-diamante) */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -11,6 +12,52 @@
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+}
+
+.easter-egg-diamante {
+  position: absolute;
+  right: -18px;
+  bottom: 170px;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  z-index: 3;
+  transform: rotate(-90deg);
+  filter: drop-shadow(0 0 4px rgba(120, 230, 255, 0.65));
+}
+
+.easter-egg-diamante-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  image-rendering: pixelated;
+  pointer-events: none;
+}
+
+/* ---- MÓVIL VERTICAL ----
+   AJUSTAR ACÁ si en celular parado se ve muy grande/chico, o muy
+   pegado/lejos del borde. */
+@media (max-width: 480px) {
+  .easter-egg-diamante {
+    width: 34px;
+    height: 34px;
+    right: -14px;
+    bottom: 110px;
+  }
+}
+
+/* ---- MÓVIL/TABLET HORIZONTAL ----
+   AJUSTAR ACÁ para celular acostado o tablet. */
+@media (pointer: coarse) and (orientation: landscape) {
+  .easter-egg-diamante {
+    width: 36px;
+    height: 36px;
+    right: -15px;
+    bottom: 90px;
+  }
 }
 
 /* =========================================================

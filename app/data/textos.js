@@ -36,6 +36,8 @@ export const TEXTOS = {
     confirmarDescargaNo: "Cancelar",
     cambiarVersionAria: "Cambiar versión del ítem",
     verVersionAria: "V {numero}",
+    diamanteEscondidoAria: "Algo brilla en el borde de la pantalla",
+    diamanteEncontradoMensaje: "¡Has encontrado un diamante!",
   },
   en: {
     splash: "These are the Best!",
@@ -70,5 +72,7 @@ export const TEXTOS = {
     confirmarDescargaNo: "Cancel",
     cambiarVersionAria: "Change item version",
     verVersionAria: "V {numero}",
+    diamanteEscondidoAria: "Something shines at the edge of the screen",
+    diamanteEncontradoMensaje: "You found a diamond!",
   },
 };

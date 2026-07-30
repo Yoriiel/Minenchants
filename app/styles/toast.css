@@ -1,0 +1,83 @@
+/* =========================================================
+   Toast de "¡Has encontrado un diamante!"
+   ========================================================= */
+
+.diamante-toast {
+  position: fixed;
+  top: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(0);
+  z-index: 300; /* por encima de TODO: el popup (100) y el fantasma de arrastre (200) */
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background-color: rgba(20, 20, 24, 0.92);
+  border: 2px solid;
+  border-color: #ffffff #555555 #555555 #ffffff;
+  outline: 2px solid #000000;
+  padding: 10px 20px 10px 10px;
+  opacity: 1;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  pointer-events: none;
+}
+
+/* Estado de salida (los últimos ~400ms antes de desmontarse del
+   todo): se agrega esta clase desde JS, ver DURACION_SALIDA_MS en
+   DiamanteEncontradoToast.js — tiene que coincidir con el tiempo de
+   la transición de acá arriba. */
+.diamante-toast-saliendo {
+  opacity: 0;
+  transform: translateX(-50%) translateY(-16px);
+}
+
+.diamante-toast-icono {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 0 4px rgba(120, 230, 255, 0.8));
+}
+
+.diamante-toast-texto {
+  font-family: var(--fuente-mojangles);
+  font-size: 0.85rem;
+  color: #55ffff; /* celeste tipo "logro conseguido" de Minecraft */
+  text-shadow: 2px 2px 0px #003333;
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .diamante-toast {
+    transition: opacity 0.4s ease;
+  }
+  .diamante-toast-saliendo {
+    transform: translateX(-50%);
+  }
+}
+
+/* ---- MÓVIL VERTICAL ----
+   AJUSTAR ACÁ: separación del borde superior, tamaño del ícono y de
+   la letra si en celular queda muy grande. */
+@media (max-width: 480px) {
+  .diamante-toast {
+    top: 14px;
+    padding: 8px 14px 8px 8px;
+    gap: 8px;
+  }
+  .diamante-toast-icono {
+    width: 28px;
+    height: 28px;
+  }
+  .diamante-toast-texto {
+    font-size: 0.65rem;
+    white-space: normal;
+    max-width: 60vw;
+  }
+}
+
+/* ---- MÓVIL/TABLET HORIZONTAL ---- */
+@media (pointer: coarse) and (orientation: landscape) {
+  .diamante-toast-texto {
+    font-size: 0.7rem;
+  }
+}

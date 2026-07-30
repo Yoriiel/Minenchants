@@ -1,25 +1,11 @@
 /* =========================================================
    Popup: mesa de encantamientos (Popup-mesa.png, 514×485px).
-
-   TODO acá adentro está en píxeles que coinciden 1:1 con la imagen
-   original (514×485) — si abrís Popup-mesa.png en cualquier editor
-   y pasás el mouse sobre una casilla, esas coordenadas son las que
-   escribís directo en `left`/`top` de cada bloque de abajo.
-
-   El tamaño final en pantalla lo controla `--popup-escala` (un
-   transform: scale() sobre TODO el popup), así que podés cambiar
-   solo ese número para agrandar/achicar todo sin recalcular nada.
    ========================================================= */
 
 .popup-fondo {
   position: fixed;
   inset: 0;
   z-index: 100;
-  /* Antes tenía backdrop-filter: blur(3px) — lo sacamos porque es
-     caro en GPU/CPU: el navegador tiene que desenfocar TODO lo que
-     hay detrás (incluidas las partículas animándose) en cada frame.
-     Subimos un poco la opacidad para compensar visualmente la falta
-     de blur. AJUSTAR ACÁ el número si lo querés más oscuro/claro. */
   background: rgba(5, 3, 10, 0.88);
   display: flex;
   align-items: center;
@@ -72,16 +58,6 @@
   object-fit: contain;
   image-rendering: pixelated;
   cursor: grab;
-  /* En reposo, un poco más chico que la casilla para que no quede
-     "apretado" — ver nota de tamaño en Parte 3 más abajo.
-     OJO: a propósito NO usamos transform: scale() acá. Ese approach
-     se veía un poco borroso al animar, porque el navegador compone
-     el transform en GPU con suavizado, sin importar el
-     image-rendering: pixelated de más arriba (esa propiedad solo
-     controla cómo se re-rasteriza el <img> a su tamaño en CSS, no
-     cómo se compone una capa ya transformada). Animando width/height
-     de verdad, el navegador vuelve a rasterizar pixelado en CADA
-     frame, así que se mantiene nítido todo el tiempo. */
   transition: width 0.05s ease, height 0.05s ease;
   touch-action: none; /* evita que el navegador scrollee al arrastrar en touch */
   user-select: none;
@@ -102,8 +78,6 @@
   height: 100%;
 }
 
-/* Mientras se arrastra un ítem, no queremos que el hover de la
-   casilla de origen (que quedó "vacía" visualmente) reaccione. */
 .popup-item-oculto {
   opacity: 0;
   pointer-events: none;
@@ -126,9 +100,6 @@
   filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.5));
 }
 
-/* El ícono que "vuela" de una casilla a otra cuando se mueve por
-   toque (sin arrastrar). Va un poco por encima del fantasma de
-   arrastre porque a veces hay dos volando a la vez (intercambio). */
 .popup-item-vuelo {
   position: fixed;
   top: 0;
@@ -157,12 +128,6 @@
   filter: drop-shadow(0 0 4px rgba(255, 255, 85, 0.9));
 }
 
-/* Grid principal: 3 filas × 9 columnas = 27 casillas.
-   MOVER TODO EL BLOQUE: cambiá `left` / `top` (esquina superior
-   izquierda de la primera casilla).
-   SEPARACIÓN: `--popup-gap-col` (entre columnas) y `--popup-gap-fila`
-   (entre filas) en .popup-ventana, arriba.
-   TAMAÑO DE CASILLA: `--popup-casilla-tam` en .popup-ventana. */
 .popup-inventario-principal {
   position: absolute;
   left: 33px;
@@ -182,9 +147,6 @@
   left: 33px;
   top: 411px;
   display: grid;
-  /* 9 columnas: la misma cantidad que casillasHotbar en page.js,
-     para que esta fila sea 1:1 con la barra HUD real. Si cambiás
-     CASILLAS_HOTBAR en page.js, actualizá también este número. */
   grid-template-columns: repeat(9, var(--popup-casilla-tam));
   grid-template-rows: var(--popup-casilla-tam);
   column-gap: var(--popup-gap-col);
@@ -251,17 +213,7 @@
 }
 
 /* =========================================================
-   Selector de versión: botón largo y delgado, partido en 2 (o más,
-   si el ítem tuviera más versiones), justo debajo del panel de
-   encantamientos. Recorre TODO el ancho del panel (330px, mismo
-   `left`/`width` que .popup-encantamientos) para que quede alineado.
-
-   MOVERLO/AGRANDARLO: cambiá `left` / `top` / `width` / `height` acá
-   abajo (escala 1:1 con Popup-mesa.png, igual que el resto del popup).
-   COLORES/BORDES: son los mismos grises "estilo Minecraft" que el
-   resto de los botones del sitio (ver .btn-mc en buttons.css), pero
-   más delgado y sin el bisel completo, para no competir con el resto
-   del popup.
+   Selector de versión: botón largo y delgado, partido en 2
    ========================================================= */
 .popup-selector-version {
   position: absolute;

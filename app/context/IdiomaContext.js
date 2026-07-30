@@ -4,7 +4,7 @@ import { createContext, useContext, useLayoutEffect, useState } from "react";
 import { TEXTOS } from "../data/textos";
 
 const STORAGE_KEY = "minenchants-idioma-v1";
-const IDIOMA_POR_DEFECTO = "es";
+const IDIOMA_POR_DEFECTO = "en";
 
 function cargarGuardado() {
   if (typeof window === "undefined") return null;

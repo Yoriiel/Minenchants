@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -11,9 +11,11 @@ import InventoryPopup from "./components/InventoryPopup";
 import DragGhost from "./components/DragGhost";
 import GiroDispositivo from "./components/GiroDispositivo";
 import VueloItem from "./components/VueloItem";
+import DiamanteEncontradoToast from "./components/DiamanteEncontradoToast";
 
 import { ITEMS, traducirItemsPorId } from "./data/items";
 import { RELLENO_ITEMS, RELLENO_ITEMS_POR_ID } from "./data/rellenoItems";
+import { CLAVE_DIAMANTE_ENCONTRADO, ITEM_DIAMANTE_SECRETO } from "./data/easterEggDiamante";
 import { useInventoryPopup } from "./hooks/useInventoryPopup";
 import { useDragAndDrop } from "./hooks/useDragAndDrop";
 import { useOrientacionMovil } from "./hooks/useOrientacionMovil";
@@ -30,17 +32,8 @@ gsap.registerPlugin(ScrollTrigger);
 const CASILLAS_HOTBAR = 9;
 const PARTICULAS_NORMAL = 65;
 
-// Cantidad de partículas del header en la versión MÓVIL (pantallas
-// angostas): bastante menos que en escritorio (PARTICULAS_NORMAL) por
-// rendimiento, ya que son dispositivos con menos CPU/GPU disponible.
-// AJUSTAR ACÁ para subir o bajar esa cantidad.
 const PARTICULAS_MOVIL = 55;
 
-// Cantidad de partículas de la sección 2 (HUD) en móvil. Un poco menos
-// que las del header (PARTICULAS_MOVIL) porque en móvil ya hay DOS
-// canvas de partículas simulándose al mismo tiempo (header + sección
-// 2) y conviene repartir el presupuesto de CPU entre ambos. AJUSTAR
-// ACÁ para subir o bajar esa cantidad.
 const PARTICULAS_MOVIL_SECCION2 = 20;
 
 // Ancho máximo (px) considerado "móvil" para apagar las partículas
@@ -52,15 +45,12 @@ export default function Home() {
   const { particulasApagadas } = useConfiguracionContext();
   const { idioma } = useIdioma();
 
-  // Catálogo de ítems en el idioma actual (títulos y encantamientos).
-  // Se recalcula solo cuando cambia el idioma, no en cada render.
-  // Los ítems de RELLENO no tienen traducción (son solo decorativos,
-  // ver rellenoItems.js) así que se agregan tal cual, ya mezclados en
-  // el mismo objeto — así cualquier componente (Hud, InventoryPopup)
-  // puede resolver CUALQUIER id, sea real o de relleno, de la misma
-  // forma: itemsPorId[id].
   const itemsPorId = useMemo(
-    () => ({ ...traducirItemsPorId(idioma), ...RELLENO_ITEMS_POR_ID }),
+    () => ({
+      ...traducirItemsPorId(idioma),
+      ...RELLENO_ITEMS_POR_ID,
+      [ITEM_DIAMANTE_SECRETO.id]: ITEM_DIAMANTE_SECRETO,
+    }),
     [idioma]
   );
 
@@ -73,8 +63,27 @@ export default function Home() {
     posiciones,
     siguienteCasilleroDesdeAbajo,
     esRelleno,
+    agregarItemSiNoExiste,
   } = useInventoryPopup(ITEMS, CASILLAS_HOTBAR, RELLENO_ITEMS);
 
+  const [mostrarToastDiamante, setMostrarToastDiamante] = useState(false);
+
+  useLayoutEffect(() => {
+    try {
+      if (window.localStorage.getItem(CLAVE_DIAMANTE_ENCONTRADO) === "true") {
+        agregarItemSiNoExiste(ITEM_DIAMANTE_SECRETO);
+      }
+    } catch {
+      // Sin LocalStorage disponible, no hay nada que restaurar.
+    }
+    // Solo nos interesa revisar esto una vez, al montar.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const manejarDiamanteEncontrado = (item) => {
+    agregarItemSiNoExiste(item);
+    setMostrarToastDiamante(true);
+  };
   const { avisoVisto } = useTeclaE({
     popupAbierto: Boolean(popup),
     abrirPopup,
@@ -136,6 +145,7 @@ export default function Home() {
         popupAbierto={Boolean(popup)}
         mostrarAviso={!avisoVisto && esDispositivoEscritorio}
         onSelectItem={abrirPopup}
+        onDiamanteEncontrado={manejarDiamanteEncontrado}
         particulasMovil={modoParticulasMovil}
         cantidadParticulasMovil={PARTICULAS_MOVIL_SECCION2}
       />
@@ -169,6 +179,10 @@ export default function Home() {
       ))}
 
       {necesitaGirar && <GiroDispositivo />}
+
+      {mostrarToastDiamante && (
+        <DiamanteEncontradoToast onCerrar={() => setMostrarToastDiamante(false)} />
+      )}
     </>
   );
 }
