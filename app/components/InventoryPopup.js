@@ -1,5 +1,8 @@
+import { useState } from "react";
 import InventorySlot from "./InventorySlot";
 import EnchantmentPanel from "./EnchantmentPanel";
+import BuscadorPopupOverlay from "./BuscadorPopupOverlay";
+import { useIdioma } from "../context/IdiomaContext";
 
 /**
  * Popup modal de la mesa de encantamientos: casilla principal (bajo
@@ -19,7 +22,17 @@ export default function InventoryPopup({
   limpiarSeleccion,
   casillasHotbar,
   onClose,
+  onBuscarSeleccion,
 }) {
+  const { t } = useIdioma();
+
+  // Overlay de búsqueda del popup: es un estado 100% local (solo le
+  // interesa a este componente si está abierto o cerrado). Lo único
+  // que sale hacia afuera es la selección exitosa, vía
+  // `onBuscarSeleccion` (mismo handler que usa el buscador del
+  // header — se conecta de verdad en la Parte 5, en page.js).
+  const [busquedaAbierta, setBusquedaAbierta] = useState(false);
+
   // El panel de encantamientos siempre refleja lo que hay AHORA en la
   // casilla principal, así que se recalcula en cada render del popup
   // (por ejemplo, al soltar/sacar un ítem de esa casilla).
@@ -103,6 +116,22 @@ export default function InventoryPopup({
         {renderCasilla("principal", true)}
         <EnchantmentPanel item={itemPrincipal} />
 
+        {/* Botón de lupa: abre el buscador DENTRO del popup (Parte 4).
+            AJUSTAR POSICIÓN/TAMAÑO: ver ".popup-boton-buscar" en
+            popup.css (mismas coordenadas 1:1 con Popup-mesa.png que
+            el resto del popup). */}
+        <button
+          type="button"
+          className="popup-boton-buscar"
+          onClick={() => setBusquedaAbierta(true)}
+          aria-label={t("buscarPopupAria")}
+        >
+          <svg viewBox="0 0 24 24" className="popup-boton-buscar-icono" aria-hidden="true">
+            <circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" strokeWidth="2.2" />
+            <line x1="15.3" y1="15.3" x2="21" y2="21" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
+          </svg>
+        </button>
+
         <div className="popup-inventario-principal">
           {Array.from({ length: 27 }, (_, i) => renderCasilla(i))}
         </div>
@@ -110,6 +139,13 @@ export default function InventoryPopup({
           {Array.from({ length: casillasHotbar }, (_, i) => renderCasilla(27 + i))}
         </div>
       </div>
+
+      {busquedaAbierta && (
+        <BuscadorPopupOverlay
+          onCerrar={() => setBusquedaAbierta(false)}
+          onSeleccionar={onBuscarSeleccion}
+        />
+      )}
     </div>
   );
 }

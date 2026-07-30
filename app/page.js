@@ -32,8 +32,17 @@ gsap.registerPlugin(ScrollTrigger);
 const CASILLAS_HOTBAR = 9;
 const PARTICULAS_NORMAL = 65;
 
+// Cantidad de partículas del header en la versión MÓVIL (pantallas
+// angostas): bastante menos que en escritorio (PARTICULAS_NORMAL) por
+// rendimiento, ya que son dispositivos con menos CPU/GPU disponible.
+// AJUSTAR ACÁ para subir o bajar esa cantidad.
 const PARTICULAS_MOVIL = 55;
 
+// Cantidad de partículas de la sección 2 (HUD) en móvil. Un poco menos
+// que las del header (PARTICULAS_MOVIL) porque en móvil ya hay DOS
+// canvas de partículas simulándose al mismo tiempo (header + sección
+// 2) y conviene repartir el presupuesto de CPU entre ambos. AJUSTAR
+// ACÁ para subir o bajar esa cantidad.
 const PARTICULAS_MOVIL_SECCION2 = 20;
 
 // Ancho máximo (px) considerado "móvil" para apagar las partículas
@@ -45,6 +54,14 @@ export default function Home() {
   const { particulasApagadas } = useConfiguracionContext();
   const { idioma } = useIdioma();
 
+  // Catálogo de ítems en el idioma actual (títulos y encantamientos).
+  // Se recalcula solo cuando cambia el idioma, no en cada render.
+  // Los ítems de RELLENO (y el diamante del easter egg) no tienen
+  // traducción (son solo decorativos, ver rellenoItems.js /
+  // easterEggDiamante.js) así que se agregan tal cual, ya mezclados
+  // en el mismo objeto — así cualquier componente (Hud,
+  // InventoryPopup) puede resolver CUALQUIER id, sea real, de
+  // relleno o el diamante, de la misma forma: itemsPorId[id].
   const itemsPorId = useMemo(
     () => ({
       ...traducirItemsPorId(idioma),
@@ -66,8 +83,22 @@ export default function Home() {
     agregarItemSiNoExiste,
   } = useInventoryPopup(ITEMS, CASILLAS_HOTBAR, RELLENO_ITEMS);
 
+  // Easter egg del diamante escondido (ver EasterEggDiamante.js /
+  // DiamanteEncontradoToast.js). `mostrarToastDiamante` controla
+  // únicamente el cartel de éxito — el propio ítem, una vez agregado
+  // a `posiciones` (vía agregarItemSiNoExiste), queda visible en el
+  // popup/HUD para siempre, sin depender de este estado.
   const [mostrarToastDiamante, setMostrarToastDiamante] = useState(false);
 
+  // Si el usuario YA había encontrado el diamante en una visita
+  // anterior, lo reponemos en el inventario apenas se monta — sin
+  // mostrar el cartel de éxito de nuevo (eso es solo para la primera
+  // vez). useLayoutEffect (en vez de useEffect) para que corra antes
+  // de pintar el primer frame, igual que el resto de la carga de
+  // posiciones dentro de useInventoryPopup — y, como se declara
+  // DESPUÉS de useInventoryPopup(...) más arriba, React lo corre
+  // recién una vez que el propio hook ya terminó de hidratar
+  // `posiciones`, así que agregarItemSiNoExiste nunca pisa nada.
   useLayoutEffect(() => {
     try {
       if (window.localStorage.getItem(CLAVE_DIAMANTE_ENCONTRADO) === "true") {
@@ -80,10 +111,36 @@ export default function Home() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Se dispara la primera vez que el usuario encuentra el diamante
+  // (click en EasterEggDiamante, dentro de Hud): lo suma de verdad al
+  // inventario Y muestra el cartel de éxito.
   const manejarDiamanteEncontrado = (item) => {
     agregarItemSiNoExiste(item);
     setMostrarToastDiamante(true);
   };
+  // Acción de éxito COMPARTIDA por los 2 buscadores (header y popup,
+  // Partes 3 y 4): scrollea a la Sección 2 y deja el ítem encontrado
+  // listo en la casilla principal, reusando el mismo `abrirPopup` que
+  // ya usa Hud.js.
+  //
+  // OJO con un caso que `abrirPopup` no contempla por sí solo: si el
+  // buscador de ADENTRO del popup (la lupa) se usa mientras ya hay
+  // otro ítem en la principal, `abrirPopup` pisaría ese `principal`
+  // directo — el ítem viejo se perdería (no vuelve a ningún
+  // casillero). Por eso, si ya hay algo ahí, primero lo sacamos a la
+  // primera casilla libre (mismo camino que ya usa el atajo de
+  // Ctrl+click/doble click para sacar el ítem de la principal).
+  const manejarBusquedaExitosa = (item) => {
+    document.getElementById("seccion-marcadores")?.scrollIntoView({ behavior: "smooth" });
+
+    if (popup?.principal) {
+      const destino = siguienteCasilleroDesdeAbajo();
+      if (destino !== null) moverItem("principal", destino);
+    }
+
+    abrirPopup(item);
+  };
+
   const { avisoVisto } = useTeclaE({
     popupAbierto: Boolean(popup),
     abrirPopup,
@@ -136,7 +193,11 @@ export default function Home() {
         />
       )}
 
-      <Hero particulasMovil={modoParticulasMovil} cantidadParticulasMovil={PARTICULAS_MOVIL} />
+      <Hero
+        particulasMovil={modoParticulasMovil}
+        cantidadParticulasMovil={PARTICULAS_MOVIL}
+        onBuscarSeleccion={manejarBusquedaExitosa}
+      />
 
       <Hud
         itemsPorId={itemsPorId}
@@ -163,6 +224,7 @@ export default function Home() {
           limpiarSeleccion={limpiarSeleccion}
           casillasHotbar={CASILLAS_HOTBAR}
           onClose={cerrarPopup}
+          onBuscarSeleccion={manejarBusquedaExitosa}
         />
       )}
 
