@@ -29,6 +29,11 @@ const ITEMS_BASE = [
     img: "/img/Peto.gif",
     tituloEs: "Pechera",
     tituloEn: "Chestplate",
+    // "Peto" es el nombre oficial en el español de España (en
+    // Latinoamérica se usa "Pechera", que es el que mostramos). Se
+    // usa SOLO para que la búsqueda lo encuentre igual, no cambia lo
+    // que se ve en pantalla.
+    alias: ["Peto"],
     versionesEs: [["Reparación", "Irrompibilidad III", "Protección IV", "Espinas III"]],
     versionesEn: [["Mending", "Unbreaking III", "Protection IV", "Thorns III"]],
   },
@@ -37,6 +42,8 @@ const ITEMS_BASE = [
     img: "/img/Legs.gif",
     tituloEs: "Pantalones",
     tituloEn: "Leggings",
+    // "Perneras" es el nombre oficial en español de España.
+    alias: ["Perneras"],
     versionesEs: [["Reparación", "Protección IV", "Irrompibilidad III", "Espinas III", "Sigilo Rápido III"]],
     versionesEn: [["Mending", "Protection IV", "Unbreaking III", "Thorns III", "Swift Sneak III"]],
   },
@@ -157,6 +164,10 @@ const ITEMS_BASE = [
     img: "/img/Mazo.gif",
     tituloEs: "Mazo",
     tituloEn: "Mace",
+    // "Maza" es el nombre oficial (según la wiki en español de
+    // Minecraft); "Mazo" es una variante dialectal (Ecuador, México,
+    // Venezuela) que es la que ya veníamos usando para mostrar.
+    alias: ["Maza"],
     versionesEs: [["Reparación", "Irrompibilidad III", "Densidad V", "Ráfaga de Viento III", "Aspecto Ígneo II"]],
     versionesEn: [["Mending", "Unbreaking III", "Density V", "Wind Burst III", "Fire Aspect II"]],
   },
@@ -197,6 +208,9 @@ const ITEMS_BASE = [
     img: "/img/Mechero.png",
     tituloEs: "Mechero",
     tituloEn: "Flint and Steel",
+    // Nombres alternativos usados en distintas regiones/wikis en
+    // español para el mismo ítem.
+    alias: ["Yesquero", "Encendedor"],
     versionesEs: [["Reparación", "Irrompibilidad III"]],
     versionesEn: [["Mending", "Unbreaking III"]],
   },
@@ -249,3 +263,9 @@ export function traducirItemsPorId(idioma) {
 // como useInventoryPopup.
 export const ITEMS = traducirItems("es");
 export const ITEMS_POR_ID = Object.fromEntries(ITEMS.map((it) => [it.id, it]));
+
+// Se exporta tal cual (con tituloEs/tituloEn/alias juntos) para que
+// app/utils/buscarItems.js pueda armar su índice de búsqueda sin
+// depender de un idioma en particular — la búsqueda tiene que
+// encontrar un ítem sin importar en qué idioma esté escrito.
+export { ITEMS_BASE };
