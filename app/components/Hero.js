@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Particles from "./Particles";
 import Burbuja from "./Burbuja";
 import ModalConfirmacion from "./ModalConfirmacion";
+import BuscadorHeader from "./BuscadorHeader";
 import { useEnVista } from "../hooks/useEnVista";
 import { useMusicPlayer } from "../hooks/useMusicPlayer";
 import { useConfiguracionContext } from "../context/ConfiguracionContext";
@@ -12,7 +13,11 @@ import { useIdioma } from "../context/IdiomaContext";
 const PASOS_REAPARICION_HEADER = 15;
 const MS_ENTRE_PASOS_REAPARICION_HEADER = 40;
 
-export default function Hero({ particulasMovil = false, cantidadParticulasMovil = 15 }) {
+export default function Hero({
+  particulasMovil = false,
+  cantidadParticulasMovil = 15,
+  onBuscarSeleccion,
+}) {
   const [refHeader, enVista] = useEnVista();
   const particulasApiRef = useRef(null);
   const estabaEnVistaRef = useRef(true);
@@ -142,6 +147,7 @@ export default function Hero({ particulasMovil = false, cantidadParticulasMovil 
 
         <div className="menu-minecraft">
           <a href="#seccion-marcadores" className="btn-mc btn-largo">{t("encantar")}</a>
+          <BuscadorHeader onSeleccionar={onBuscarSeleccion} />
           <button
             type="button"
             className="btn-mc btn-largo"
@@ -149,7 +155,6 @@ export default function Hero({ particulasMovil = false, cantidadParticulasMovil 
           >
             {t("descargarPdf")}
           </button>
-          <button className="btn-mc btn-largo">{t("javaEdition")}</button>
 
           <div className="fila-botones-inferior" ref={filaBotonesRef}>
             <div className="boton-con-burbuja">

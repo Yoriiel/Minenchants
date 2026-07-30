@@ -1,0 +1,108 @@
+/* =========================================================
+   Buscador de ítems: estilos BASE compartidos por el buscador del
+   header (Parte 3) y el del popup (Parte 4) — acá va todo lo que es
+   igual en los dos (colores, tipografía, la fila input+flecha, el
+   dropdown de sugerencias, el mensaje de error). Cada wrapper le
+   agrega ENCIMA sus propias clases para el tamaño/posición/apertura
+   (eso vive en hero.css y popup.css respectivamente).
+   ========================================================= */
+
+.campo-busqueda {
+  position: relative;
+  width: 100%;
+}
+
+.campo-busqueda-fila {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  height: 100%;
+}
+
+.campo-busqueda-input {
+  flex: 1;
+  min-width: 0; /* para que el flex no lo empuje a desbordar el contenedor */
+  font-family: var(--fuente-mojangles);
+  font-size: 0.75rem;
+  color: #ffffff;
+  background-color: rgb(161, 161, 161);
+  border: 1px solid;
+  border-color: #555555 #ffffff #ffffff #555555; /* bisel "hundido", como un campo de texto */
+  outline: none;
+  padding: 0 8px;
+}
+
+.campo-busqueda-input::placeholder {
+  /* Semitransparente, como se pidió. */
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.campo-busqueda-boton-enviar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  flex-shrink: 0;
+  background-color: rgb(161, 161, 161);
+  border: 1px solid;
+  border-color: #ffffff #555555 #555555 #ffffff;
+  color: #ffffff;
+  cursor: pointer;
+  padding: 0;
+}
+
+.campo-busqueda-boton-enviar:hover {
+  background-color: #7994cd;
+  color: #ffff55;
+}
+
+.campo-busqueda-flecha {
+  width: 16px;
+  height: 16px;
+}
+
+/* Lista de sugerencias: z-index bien alto (por encima del toast del
+   diamante, que usa 300) para que nunca quede tapada por nada. */
+.campo-busqueda-sugerencias {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin-top: 2px;
+  list-style: none;
+  padding: 0;
+  background-color: rgb(40, 40, 40);
+  border: 1px solid #000000;
+  z-index: 400;
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.campo-busqueda-sugerencia {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 6px 10px;
+  background: transparent;
+  border: none;
+  color: #ffffff;
+  font-family: var(--fuente-mojangles);
+  font-size: 0.7rem;
+  cursor: pointer;
+}
+
+.campo-busqueda-sugerencia:hover {
+  background-color: #7994cd;
+  color: #ffff55;
+}
+
+.campo-busqueda-error {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 4px;
+  font-family: var(--fuente-mojangles);
+  font-size: 0.65rem;
+  color: #ff5555;
+  text-shadow: 1px 1px 0 #330000;
+}

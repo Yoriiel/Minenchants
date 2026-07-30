@@ -112,3 +112,49 @@
     transform: translateY(-4vh); /* 👈 AQUÍ */
   }
 }
+
+/* =========================================================
+   Buscador del header: reemplaza al viejo botón "Java Edition
+   Soon". Los estilos GENÉRICOS del input/flecha/sugerencias/error
+   viven en buscador.css (compartidos con el buscador del popup) —
+   acá SOLO ajustamos tamaños para que combine con el resto de los
+   botones del header (mismo alto/tipografía que .btn-mc).
+
+   ANCHO: no hace falta ninguna variable extra — tanto el botón
+   colapsado (.btn-mc.btn-largo) como este wrapper son hijos directos
+   de .menu-minecraft con width:100%, así que SIEMPRE miden lo mismo.
+   ========================================================= */
+.buscador-header {
+  width: 100%;
+}
+
+.buscador-header .campo-busqueda-input {
+  padding: 15px 10px; /* mismo alto vertical que .btn-mc (padding: 15px 0) */
+  font-size: 0.8rem; /* igual que .btn-mc */
+}
+
+.buscador-header .campo-busqueda-boton-enviar {
+  width: 46px; /* mismo ancho que .btn-cuadrado, para que se sienta parte del mismo set */
+}
+
+/* MÓVIL VERTICAL — mismos valores que .btn-mc en buttons.css */
+@media (max-width: 480px) {
+  .buscador-header .campo-busqueda-input {
+    padding: 7px 10px;
+    font-size: 0.8rem;
+  }
+  .buscador-header .campo-busqueda-boton-enviar {
+    width: 34px; /* igual que .btn-cuadrado en este breakpoint */
+  }
+}
+
+/* MÓVIL/TABLET HORIZONTAL — mismos valores que .btn-mc en buttons.css */
+@media (pointer: coarse) and (orientation: landscape) {
+  .buscador-header .campo-busqueda-input {
+    padding: 1.9vh 10px;
+    font-size: clamp(0.55rem, 1.2vh, 0.85rem);
+  }
+  .buscador-header .campo-busqueda-boton-enviar {
+    width: clamp(40px, 6vh, 40px);
+  }
+}

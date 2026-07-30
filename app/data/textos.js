@@ -38,6 +38,11 @@ export const TEXTOS = {
     verVersionAria: "V {numero}",
     diamanteEscondidoAria: "Algo brilla en el borde de la pantalla",
     diamanteEncontradoMensaje: "¡Has encontrado un diamante!",
+    buscarItemBoton: "Buscar Ítem",
+    buscarPlaceholder: "Buscar Ítem",
+    buscarEnviarAria: "Buscar",
+    buscarPopupAria: "Buscar ítem",
+    itemNoEncontrado: "Ítem no encontrado",
   },
   en: {
     splash: "These are the Best!",
@@ -74,5 +79,10 @@ export const TEXTOS = {
     verVersionAria: "V {numero}",
     diamanteEscondidoAria: "Something shines at the edge of the screen",
     diamanteEncontradoMensaje: "You found a diamond!",
+    buscarItemBoton: "Search Item",
+    buscarPlaceholder: "Search Item",
+    buscarEnviarAria: "Search",
+    buscarPopupAria: "Search item",
+    itemNoEncontrado: "Item not found",
   },
 };
