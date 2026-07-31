@@ -23,6 +23,7 @@ export default function InventoryPopup({
   casillasHotbar,
   onClose,
   onBuscarSeleccion,
+  mostrarBuscador = false,
 }) {
   const { t } = useIdioma();
 
@@ -116,21 +117,22 @@ export default function InventoryPopup({
         {renderCasilla("principal", true)}
         <EnchantmentPanel item={itemPrincipal} />
 
-        {/* Botón de lupa: abre el buscador DENTRO del popup (Parte 4).
-            AJUSTAR POSICIÓN/TAMAÑO: ver ".popup-boton-buscar" en
-            popup.css (mismas coordenadas 1:1 con Popup-mesa.png que
-            el resto del popup). */}
-        <button
-          type="button"
-          className="popup-boton-buscar"
-          onClick={() => setBusquedaAbierta(true)}
-          aria-label={t("buscarPopupAria")}
-        >
-          <svg viewBox="0 0 24 24" className="popup-boton-buscar-icono" aria-hidden="true">
-            <circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" strokeWidth="2.2" />
-            <line x1="15.3" y1="15.3" x2="21" y2="21" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
-          </svg>
-        </button>
+        {/* Botón de lupa: se quita por completo en dispositivos
+            móviles/táctiles (el teclado virtual tapaba el buscador
+            ahí), en escritorio queda exactamente igual. */}
+        {mostrarBuscador && (
+          <button
+            type="button"
+            className="popup-boton-buscar"
+            onClick={() => setBusquedaAbierta(true)}
+            aria-label={t("buscarPopupAria")}
+          >
+            <svg viewBox="0 0 24 24" className="popup-boton-buscar-icono" aria-hidden="true">
+              <circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" strokeWidth="2.2" />
+              <line x1="15.3" y1="15.3" x2="21" y2="21" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
+            </svg>
+          </button>
+        )}
 
         <div className="popup-inventario-principal">
           {Array.from({ length: 27 }, (_, i) => renderCasilla(i))}
@@ -140,7 +142,7 @@ export default function InventoryPopup({
         </div>
       </div>
 
-      {busquedaAbierta && (
+      {mostrarBuscador && busquedaAbierta && (
         <BuscadorPopupOverlay
           onCerrar={() => setBusquedaAbierta(false)}
           onSeleccionar={onBuscarSeleccion}

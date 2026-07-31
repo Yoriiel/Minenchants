@@ -197,6 +197,7 @@ export default function Home() {
         particulasMovil={modoParticulasMovil}
         cantidadParticulasMovil={PARTICULAS_MOVIL}
         onBuscarSeleccion={manejarBusquedaExitosa}
+        mostrarBuscador={esDispositivoEscritorio}
       />
 
       <Hud
@@ -225,6 +226,7 @@ export default function Home() {
           casillasHotbar={CASILLAS_HOTBAR}
           onClose={cerrarPopup}
           onBuscarSeleccion={manejarBusquedaExitosa}
+          mostrarBuscador={esDispositivoEscritorio}
         />
       )}
 

@@ -17,6 +17,7 @@ export default function Hero({
   particulasMovil = false,
   cantidadParticulasMovil = 15,
   onBuscarSeleccion,
+  mostrarBuscador = false,
 }) {
   const [refHeader, enVista] = useEnVista();
   const particulasApiRef = useRef(null);
@@ -147,7 +148,7 @@ export default function Hero({
 
         <div className="menu-minecraft">
           <a href="#seccion-marcadores" className="btn-mc btn-largo">{t("encantar")}</a>
-          <BuscadorHeader onSeleccionar={onBuscarSeleccion} />
+          {mostrarBuscador && <BuscadorHeader onSeleccionar={onBuscarSeleccion} />}
           <button
             type="button"
             className="btn-mc btn-largo"
