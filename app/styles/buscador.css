@@ -106,3 +106,39 @@
   color: #ff5555;
   text-shadow: 1px 1px 0 #330000;
 }
+
+/* =========================================================
+   Fix para el teclado virtual en móvil/tablet ACOSTADO: en ese modo
+   la pantalla ya es baja de por sí, y el teclado se come más de la
+   mitad de lo que queda — tapando el input y las sugerencias, que
+   siguen "ahí" pero ya no se ven.
+
+   Mientras el buscador tiene el foco (:focus-within — se activa con
+   cualquier cosa de adentro enfocada, no solo el input) lo despegamos
+   de donde esté y lo fijamos pegado arriba de TODA la pantalla. Como
+   el teclado siempre crece desde abajo, ahí arriba queda garantizado
+   visible. Se aplica a los 2 buscadores por igual (comparten esta
+   misma clase .campo-busqueda) sin tocar nada de JS.
+
+   AJUSTAR ACÁ si hiciera falta más/menos alto para las sugerencias.
+   ========================================================= */
+@media (pointer: coarse) and (orientation: landscape) {
+  .campo-busqueda:focus-within {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 500; /* por encima de todo, incluso de .campo-busqueda-sugerencias (400) */
+    background-color: rgb(60, 60, 60);
+    padding: 6px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+  }
+
+  /* Con el buscador ya fijo arriba, las sugerencias (que son
+     position:absolute respecto a él) quedan bien ubicadas solas —
+     achicamos el alto máximo nomás, para no invadir el espacio
+     donde probablemente ya empieza el teclado. */
+  .campo-busqueda:focus-within .campo-busqueda-sugerencias {
+    max-height: 30vh;
+  }
+}
