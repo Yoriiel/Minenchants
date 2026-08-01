@@ -1,6 +1,3 @@
-// Diccionario de textos de la interfaz (todo lo que NO son datos de
-// items/encantamientos, eso vive en items.js). Para agregar un texto
-// nuevo: agregá la clave en "es" y su traducción en "en".
 
 export const TEXTOS = {
   es: {

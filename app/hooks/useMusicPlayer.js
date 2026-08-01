@@ -8,8 +8,6 @@ const VOLUMEN_POR_DEFECTO = 50;
 const INDICE_INICIAL = Math.max(0, PISTAS.indexOf(PISTA_INICIAL));
 
 // Pausa entre una pista y la siguiente cuando termina sola (5 minutos).
-// Se puede saltar en cualquier momento con los botones de pista
-// anterior/siguiente.
 const PAUSA_ENTRE_PISTAS_MS = 5 * 60 * 1000;
 
 function cargarGuardado() {
@@ -36,8 +34,7 @@ function guardar(config) {
   }
 }
 
-// Elige una pista al azar entre todas, evitando repetir la que se
-// acaba de terminar (índice actual).
+// Elige una pista al azar entre todas, evitando repetir la que se acaba de terminar (índice actual).
 function elegirPistaAleatoria(indiceActual) {
   if (PISTAS.length <= 1) return 0;
   let indice;
@@ -60,8 +57,7 @@ export function useMusicPlayer() {
   activoRef.current = activo;
   indiceRef.current = indicePista;
 
-  // Cancela la espera pendiente (si hay una pista programada para
-  // arrancar después de la pausa de 5 minutos).
+  // Cancela la espera pendiente (si hay una pista programada para arrancar después de la pausa de 5 minutos).
   const limpiarEspera = () => {
     if (timeoutEsperaRef.current) {
       window.clearTimeout(timeoutEsperaRef.current);
@@ -69,8 +65,7 @@ export function useMusicPlayer() {
     }
   };
 
-  // Programa la siguiente pista (aleatoria, sin repetir la actual)
-  // después de la pausa de PAUSA_ENTRE_PISTAS_MS.
+  // Programa la siguiente pista (aleatoria, sin repetir la actual) después de la pausa de PAUSA_ENTRE_PISTAS_MS.
   const programarSiguientePista = () => {
     limpiarEspera();
     timeoutEsperaRef.current = window.setTimeout(() => {
@@ -89,8 +84,7 @@ export function useMusicPlayer() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Crear el elemento <audio> una sola vez. Al terminar una pista, se
-  // programa la siguiente después de la pausa (ver programarSiguientePista).
+  // Crear el elemento <audio> una sola vez. Al terminar una pista, se programa la siguiente después de la pausa (ver programarSiguientePista).
   useEffect(() => {
     const audio = new Audio();
     audio.preload = "auto";
@@ -111,23 +105,18 @@ export function useMusicPlayer() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Cambio de pista: solo actualiza el src (no se dispara con otros
-  // cambios de estado, así no reinicia la pista al pausar/reanudar).
+  // Cambio de pista: solo actualiza el src (no se dispara con otros cambios de estado, así no reinicia la pista al pausar/reanudar).
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
     audio.src = encodeURI(PISTAS[indicePista]);
     if (activoRef.current) {
       audio.play().catch(() => {
-        // El navegador bloqueó el autoplay: se reintenta en la próxima
-        // interacción del usuario (ver efecto de abajo).
+        // El navegador bloqueó el autoplay: se reintenta en la próxima interacción del usuario (ver efecto de abajo).
       });
     }
   }, [indicePista]);
 
-  // Activar / pausar sin reiniciar la pista actual. Si se desactiva
-  // durante la pausa entre pistas, se cancela esa espera; si se
-  // reactiva y la pista ya había terminado, se retoma el ciclo.
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
@@ -144,8 +133,7 @@ export function useMusicPlayer() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activo]);
 
-  // Si el navegador bloqueó el autoplay inicial, se reintenta apenas
-  // el usuario interactúa por primera vez con la página.
+  // Si el navegador bloqueó el autoplay inicial, se reintenta apenas el usuario interactúa por primera vez con la página.
   useEffect(() => {
     if (!activo) return;
     const audio = audioRef.current;

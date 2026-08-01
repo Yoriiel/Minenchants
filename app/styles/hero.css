@@ -113,17 +113,6 @@
   }
 }
 
-/* =========================================================
-   Buscador del header: reemplaza al viejo botón "Java Edition
-   Soon". Los estilos GENÉRICOS del input/flecha/sugerencias/error
-   viven en buscador.css (compartidos con el buscador del popup) —
-   acá SOLO ajustamos tamaños para que combine con el resto de los
-   botones del header (mismo alto/tipografía que .btn-mc).
-
-   ANCHO: no hace falta ninguna variable extra — tanto el botón
-   colapsado (.btn-mc.btn-largo) como este wrapper son hijos directos
-   de .menu-minecraft con width:100%, así que SIEMPRE miden lo mismo.
-   ========================================================= */
 .buscador-header {
   width: 100%;
 }

@@ -10,13 +10,8 @@ const DURACION_VISIBLE_MS = 5000;
 // .diamante-toast / .diamante-toast-saliendo (toast.css).
 const DURACION_SALIDA_MS = 400;
 
-/**
- * Cartel de éxito que aparece unos segundos al encontrar el diamante
- * escondido (Parte 2). No es un modal: no bloquea la pantalla ni
- * necesita que el usuario haga nada — se cierra solo. El padre
- * (page.js, Parte 4) decide CUÁNDO montarlo; este componente solo se
- * encarga del tiempito en pantalla y de avisar cuándo ya se puede
- * desmontar (`onCerrar`).
+/*
+ Cartel de éxito que aparece unos segundos al encontrar el diamante
  */
 export default function DiamanteEncontradoToast({ onCerrar }) {
   const [saliendo, setSaliendo] = useState(false);

@@ -84,7 +84,7 @@
   }
   .btn-mc {
     font-size: 0.8rem;
-    padding: 7px 15px; /* 👈 AQUÍ: 7px arriba/abajo y 15px a los lados */
+    padding: 7px 15px; /*AQUÍ: 7px arriba/abajo y 15px a los lados */
   }
   .btn-cuadrado {
     width: 34px;
@@ -105,7 +105,7 @@
   }
   .btn-mc {
     font-size: clamp(0.55rem, 1.2vh, 0.85rem);
-    padding: 1.9vh 2vh; /* 👈 AQUÍ: Ajusta el segundo valor según prefieras */
+    padding: 1.9vh 2vh; /*AQUÍ: Ajusta el segundo valor según prefieras */
   }
   .btn-cuadrado {
     width: clamp(40px, 6vh, 40px);
@@ -122,11 +122,11 @@
 /* SOLO CELULAR HORIZONTAL (pantalla baja, hasta 500px de alto) */
 @media (pointer: coarse) and (orientation: landscape) and (max-height: 500px) {
   .menu-minecraft {
-    margin-top: -4vh; /* 👈 AQUÍ: sigue al translateY(-4vh) del logo en celular */
-    gap: 1.9vh; /* 👈 AQUÍ */
+    margin-top: -4vh; /*AQUÍ: sigue al translateY(-4vh) del logo en celular */
+    gap: 1.9vh; /*AQUÍ */
   }
   .fila-botones-inferior {
-    margin-top: 2.5vh; /* 👈 AQUÍ */
+    margin-top: 2.5vh; /*AQUÍ */
     gap: 2.5vh;
   }
 }

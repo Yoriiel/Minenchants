@@ -14,17 +14,6 @@ function rectDeCasilla(origen) {
   return document.querySelector(`[data-slot="${origen}"]`)?.getBoundingClientRect() ?? null;
 }
 
-/**
- * Segunda forma de mover ítems, sin arrastrar: tocás un ítem (queda
- * "seleccionado", con un resalte amarillo), y después tocás la
- * casilla destino (vacía u ocupada). El ítem viaja hasta ahí con una
- * animación corta; si la casilla destino ya tenía otro ítem, ambos
- * se cruzan e intercambian lugar. Tocar el mismo ítem otra vez
- * cancela la selección.
- *
- * En PC este modo se activa solo manteniendo Shift, para no pisar el
- * arrastre normal con mouse (que ya funciona sin Shift).
- */
 export function useMoverPorToque({ idEnOrigen, moverItem, popupAbierto, esRelleno }) {
   const [seleccionado, setSeleccionado] = useState(null);
   const [vuelos, setVuelos] = useState([]);
@@ -40,18 +29,11 @@ export function useMoverPorToque({ idEnOrigen, moverItem, popupAbierto, esRellen
   }, [popupAbierto]);
 
   // Mueve el ítem de `origen` a `destino` con la animación de "vuelo"
-  // corta (si `destino` ya tenía otro ítem, ambos se cruzan). La usa
-  // tanto la selección con Shift/toque como el atajo de Ctrl+click.
   const moverConAnimacion = (origen, destino) => {
     const idOrigen = idEnOrigen(origen);
     if (!idOrigen) return;
     const idDestino = idEnOrigen(destino);
 
-    // Los ítems de relleno no pueden entrar a la principal (ver el
-    // mismo chequeo, como última palabra, dentro de moverItem). Lo
-    // repetimos ACÁ, antes de animar, para no mostrar el ítem
-    // "volando" hacia la principal y después volviendo de un salto a
-    // su lugar original cuando moverItem lo rechace en silencio.
     if (destino === "principal" && esRelleno?.(idOrigen)) return;
     if (origen === "principal" && idDestino && esRelleno?.(idDestino)) return;
 
@@ -96,10 +78,7 @@ export function useMoverPorToque({ idEnOrigen, moverItem, popupAbierto, esRellen
     });
   };
 
-  // Cancela la selección activa (sin mover nada). Se usa cuando el
-  // usuario, con un ítem seleccionado por Shift/toque, hace click en
-  // cualquier punto del popup que no sea otra casilla (fondo del
-  // popup, panel de encantamientos, etc.).
+  // Cancela la selección activa (sin mover nada). 
   const limpiarSeleccion = () => setSeleccionado(null);
 
   return { seleccionado, vuelos, ocultosVuelo, alTocarCasilla, moverConAnimacion, limpiarSeleccion };

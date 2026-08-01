@@ -2,13 +2,6 @@
 
 import { useEffect, useRef } from "react";
 
-/**
- * Ícono que viaja animado desde `from` hasta `to` (coordenadas de
- * pantalla, en px) cuando se mueve/intercambia un ítem por toque, en
- * vez de arrastrarlo. Se posiciona en `from` sin transición y, en el
- * siguiente frame, se le pide ir a `to`: eso es lo que dispara la
- * animación CSS definida en .popup-item-vuelo.
- */
 export default function VueloItem({ item, from, to }) {
   const ref = useRef(null);
 

@@ -15,8 +15,7 @@ export default function RootLayout({ children }) {
   return (
     <html className="container" lang="es" dir="ltr">
       <head>
-        {/* Al recargar, algunos navegadores restauran el scroll donde
-            estabas antes. Esto fuerza que SIEMPRE se empiece arriba,
+        {/* Al recargar, algunos navegadores restauran el scroll donde estabas antes. Esto fuerza que SIEMPRE se empiece arriba,
             en el Header. */}
         <script
           dangerouslySetInnerHTML={{
@@ -43,8 +42,7 @@ export default function RootLayout({ children }) {
           href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;700&display=swap"
           rel="stylesheet"
         />
-        {/* Fallback pixelado para "Mojangles" (ver app/styles/fonts.css):
-            si no agregás el archivo real de Mojangles en /public/fonts,
+        {/* Fallback pixelado para "Mojangles" (ver app/styles/fonts.css): si no agregás el archivo real de Mojangles en /public/fonts,
             esta es la que termina usándose en los textos de encantamientos. */}
         <link
           href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"

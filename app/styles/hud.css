@@ -60,12 +60,6 @@
   }
 }
 
-/* =========================================================
-   HUD de inventario (estilo Minecraft), anclado cerca del
-   borde inferior de la Sección 2. Medidas proporcionales a
-   BarraHUD.png (600×125px, hotbar de 8 casillas ~62×60px).
-   ========================================================= */
-
 .hud {
   position: absolute;
   bottom: 3%;
@@ -188,31 +182,7 @@
 }
 
 /* =========================================================
-   Botón "⋯" (abre el inventario) — pensado para pantallas
-   táctiles donde no hay teclado físico para presionar "E".
-   Reutiliza el estilo gris de los botones cuadrados del header
-   (.btn-mc.btn-cuadrado, ver buttons.css); acá solo se define la
-   POSICIÓN y en qué tamaños de pantalla se muestra.
-
-   `position: absolute` (no `fixed`): queda anclado adentro de
-   `.seccion-marcadores` (que ya tiene `position: relative` más
-   arriba en este archivo), así SOLO aparece dentro de la Sección 2,
-   nunca flotando sobre el header ni el resto de la página.
-
-   Oculto en escritorio real: para contar como "sin teclado" pedimos
-   `pointer: coarse` (dedo, no mouse) Y `hover: none` (sin trackpad
-   ni mouse para hacer hover) al mismo tiempo — una laptop táctil
-   normal tiene trackpad (hover: hover) aunque su pantalla sea
-   touch, así que con esto NO cuenta como "sin teclado" y el botón
-   no le aparece; un celular o tablet real sí cumple ambas cosas.
-   Nota de especificidad: `buttons.css` se importa DESPUÉS de este
-   archivo y ahí `.btn-cuadrado { display: flex }` no tiene ninguna
-   media query — con la misma especificidad (una sola clase), esa
-   regla le ganaba a nuestro `display: none` de acá solo por venir
-   después en la cascada. Por eso combinamos `.btn-cuadrado.hud-boton-menu`
-   (dos clases juntas = más especificidad) en vez de `.hud-boton-menu`
-   sola, así estas reglas SIEMPRE ganan sin importar el orden de los
-   archivos.
+   Botón "⋯" (abre el inventario)
    ========================================================= */
 .btn-cuadrado.hud-boton-menu {
   display: none;
@@ -227,24 +197,19 @@
 
 @media (max-width: 480px) and (hover: none) {
   .btn-cuadrado.hud-boton-menu {
-    display: flex; /* 👈 AQUÍ: se muestra en celular vertical */
+    display: flex; /*AQUÍ: se muestra en celular vertical */
   }
 }
 
 @media (pointer: coarse) and (orientation: landscape) and (hover: none) {
   .btn-cuadrado.hud-boton-menu {
-    display: flex; /* 👈 AQUÍ: se muestra en tablet / celular horizontal */
+    display: flex; /*AQUÍ: se muestra en tablet / celular horizontal */
   }
 }
 
 @media (max-width: 480px) {
   .hud {
-    /* 👈 AQUÍ SE CONTROLA EL TAMAÑO DE TODO EL HUD EN MÓVIL:
-       al ir en transform:scale() sobre .hud (el contenedor de TODO:
-       corazones, muslos, barra de xp Y la hotbar con sus ítems),
-       todo se achica junto y proporcional, sin tener que tocar cada
-       elemento por separado. Subí o bajá este número para agrandar
-       o achicar el HUD completo (1 = tamaño normal de escritorio). */
+    /*AQUÍ SE CONTROLA EL TAMAÑO DE TODO EL HUD EN MÓVIL:*/
     --hud-escala-movil: 0.65;
 
     bottom: 1.5%;
@@ -254,10 +219,7 @@
   }
 }
 
-/* TABLET / CELULAR HORIZONTAL — mismo criterio que ya usan hero.css y
-   buttons.css para distinguir "tablet" en este proyecto. Variable
-   PROPIA (--hud-escala-tablet), independiente de la de celular
-   vertical de arriba: AJUSTAR ACÁ el achique del HUD en tablet. */
+/* TABLET / CELULAR HORIZONTAL */
 @media (pointer: coarse) and (orientation: landscape) {
   .hud {
     --hud-escala-tablet: 0.65;
@@ -268,9 +230,7 @@
 }
 
 /* =========================================================
-   Aviso "Presioná E para abrir el inventario": centrado en la
-   Sección 2, parpadeando, hasta que se abra el popup por primera
-   vez (recién vuelve a aparecer si se recarga toda la página).
+   Aviso "Presiona E para abrir el inventario"
    ========================================================= */
 .hud-aviso-tecla-e {
   position: absolute;

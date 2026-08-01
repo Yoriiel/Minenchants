@@ -3,9 +3,7 @@
 import { useEffect } from "react";
 
 /**
- * Modal de confirmación genérico, con la misma estética pixel-art que
- * el resto de los botones del sitio (para usar en vez de un
- * window.confirm() nativo, que no se puede tematizar).
+ * Modal de confirmación genérico, con la misma estética pixel-art
  */
 export default function ModalConfirmacion({
   mensaje,

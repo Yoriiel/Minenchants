@@ -84,15 +84,7 @@ export default function Hud({
           {Array.from({ length: casillasHotbar }, (_, i) => {
             const casillero = HOTBAR_INICIO + i;
             const idItem = idsPorCasillero[casillero];
-            // Con el popup abierto, el mismo ítem ya se ve ahí adentro:
-            // acá lo "apagamos" (ni lo mostramos ni queda clickeable),
-            // y al desmontar el <img> el gif deja de ocupar memoria.
             const item = !popupAbierto && idItem ? itemsPorId[idItem] : null;
-            // Los ítems de RELLENO son decorativos: si el usuario
-            // arrastró uno hasta acá, igual se ve en la HUD, pero al
-            // tocarlo solo abrimos el popup vacío (no tiene
-            // encantamientos que mostrar, así que no puede ser "el
-            // ítem principal").
             const esItemDeRelleno = Boolean(item?.relleno);
             const etiqueta = !item
               ? t("casillaVacia")

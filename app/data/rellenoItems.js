@@ -1,6 +1,4 @@
-// agregar/quitar un ítem de relleno, este es el único
-// archivo que hay que tocar (y poner la imagen en
-// /public/img/relleno/).
+// agregar/quitar un ítem de relleno, este es el único archivo que hay que tocar (y poner la imagen en public/img/relleno/).
 
 export const RELLENO_ITEMS = [
   //{ id: "relleno_manzana", img: "/img/relleno/Apple.png", titulo: "Manzana", relleno: true },
@@ -24,7 +22,4 @@ export const RELLENO_ITEMS_POR_ID = Object.fromEntries(
   RELLENO_ITEMS.map((it) => [it.id, it])
 );
 
-// Set con los ids, para chequear rápido "¿esto es relleno?" desde
-// useInventoryPopup / useDragAndDrop / useMoverPorToque sin recorrer
-// el array cada vez.
 export const IDS_RELLENO = new Set(RELLENO_ITEMS.map((it) => it.id));

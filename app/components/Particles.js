@@ -13,13 +13,9 @@ const DECAIMIENTO_VIENTO = 0.94;
 const VIENTO_MAXIMO = 9;
 
 // "Nivel" de aparición (0 = invisibles, 1 = tamaño/opacidad normal).
-// Mientras se está scrolleando (en cualquier dirección) el nivel
-// objetivo baja a 0; cuando el scroll se detiene, vuelve a 1. El
-// nivel ACTUAL persigue a ese objetivo con un lerp cada frame, así
-// el cambio siempre es progresivo y nunca un salto brusco.
-//
+// Mientras se está scrolleando el nivel objetivo baja a 0; cuando el scroll se detiene, vuelve a 1.
 // NIVEL_LERP: qué tan rápido persigue el nivel actual al objetivo.
-// Más chico = transición más lenta y suave. AJUSTAR ACÁ.
+// Más chico = transición más lenta y suave. 
 const NIVEL_LERP = 0.05;
 // Debajo de este nivel ni se dibuja (ahorra trabajo mientras están
 // invisibles durante el scroll).
@@ -29,7 +25,7 @@ const NIVEL_MINIMO_VISIBLE = 0.01;
 // sube. AJUSTAR ACÁ qué tan chiquitas arrancan.
 const ESCALA_MINIMA_REAPARICION = 0.35;
 // Cuánto tiempo (ms) sin eventos de scroll para considerar que el
-// usuario se detuvo y arrancar la reaparición. AJUSTAR ACÁ.
+// usuario se detuvo y arrancar la reaparición. 
 const SCROLL_QUIETO_MS = 160;
 
 // ---------- Partículas "que caen" ----------
@@ -53,25 +49,25 @@ const VELOCIDAD_CAIDA_MAX = 0.5;
 
 // Cuánto pueden desviarse en el eje NO dominante mientras caen/avanzan
 // (para que no sea una línea perfectamente recta, sino algo más
-// orgánico). AJUSTAR ACÁ.
+// orgánico)
 const DERIVA_CAIDA_MIN = -0.35;
 const DERIVA_CAIDA_MAX = 0.35;
 
 // Zona (en px, medida desde el borde de salida) donde empieza el
 // desvanecimiento de las que "se desvanecen": más grande = empiezan
-// a desvanecerse antes / el fundido es más largo y suave. AJUSTAR ACÁ.
+// a desvanecerse antes / el fundido es más largo y suave.
 const ZONA_DESVANECIDO_PX = 160;
 
 // Margen (px) más allá del borde de salida antes de reciclar una
 // partícula "de corte" (la que NO se desvanece, solo sigue de
 // largo) — asegura que ya está bien fuera de cámara antes de
-// reaparecer arriba a la izquierda. AJUSTAR ACÁ.
+// reaparecer arriba a la izquierda.
 const MARGEN_SALIDA_CORTE_PX = 40;
 
 // Región (fracción del ancho/alto de pantalla) donde pueden "nacer"
 // las que caen, cerca de la esquina superior izquierda. Más chico =
 // nacen más pegadas a la esquina; más grande = repartidas en un área
-// mayor. AJUSTAR ACÁ.
+// mayor.
 const ZONA_NACIMIENTO_FRACCION = 0.4;
 
 function crearSpritePartícula() {
@@ -184,19 +180,9 @@ const Particles = forwardRef(function Particles(
 
     spriteRef.current = crearSpritePartícula();
 
-    // Medimos el tamaño REAL del canvas ya puesto en el layout (su
-    // caja CSS), no siempre window.innerWidth/innerHeight. En
-    // escritorio el canvas es fixed a toda la pantalla, así que da
-    // igual (coincide). En el canvas chico del header en móvil, en
-    // cambio, el canvas mide lo mismo que el header (position:
-    // absolute + width/height:100% dentro de él) — si acá
-    // siguiéramos usando el viewport completo, las partículas
-    // quedarían mal ubicadas/estiradas dentro de esa caja más chica.
     let ancho = (canvas.width = canvas.clientWidth);
     let alto = (canvas.height = canvas.clientHeight);
 
-    // El pool se crea con el máximo (cantidadBase); "activar menos" solo
-    // deja de simular/dibujar las últimas del array, sin recrearlas.
     particulasRef.current = Array.from({ length: cantidadBase }, () =>
       crearParticula(ancho, alto)
     );
@@ -221,11 +207,6 @@ const Particles = forwardRef(function Particles(
         Math.min(VIENTO_MAXIMO, vientoRef.current + impulso)
       );
 
-      // Mientras hay eventos de scroll llegando, las apagamos. Cada
-      // evento nuevo reinicia el temporizador de "se detuvo"; recién
-      // cuando pasan SCROLL_QUIETO_MS sin ningún evento más, se las
-      // vuelve a prender (sea que el destino fue el header o la
-      // sección 2 — no importa la dirección).
       nivelObjetivoRef.current = 0;
       if (idTimeoutScrollQuieto) clearTimeout(idTimeoutScrollQuieto);
       idTimeoutScrollQuieto = window.setTimeout(() => {
@@ -337,9 +318,7 @@ const Particles = forwardRef(function Particles(
           }
         }
 
-        // Por debajo de esto están prácticamente invisibles: nos
-        // ahorramos el drawImage (siguen "vivas" y moviéndose, solo
-        // que no se pintan) mientras se está scrolleando.
+        // Por debajo de esto están prácticamente invisibles
         const opacidadExtra = p.modo === "cayendo" ? p.opacidadActual : 1;
         if (nivel < NIVEL_MINIMO_VISIBLE || opacidadExtra <= 0) continue;
 

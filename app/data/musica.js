@@ -1,9 +1,3 @@
-// Lista de pistas de música de fondo (carpeta public/music).
-// El orden acá define el orden de los botones "pista anterior" / "pista
-// siguiente" (se recorren de forma secuencial). Al terminar una pista se
-// elige la siguiente al azar entre TODAS las de esta lista, sin repetir
-// la que recién terminó.
-
 export const PISTAS = [
   "/music/1-01. Key.mp3",
   "/music/1-02. Door.mp3",

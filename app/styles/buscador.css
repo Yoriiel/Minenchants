@@ -1,10 +1,5 @@
 /* =========================================================
-   Buscador de ítems: estilos BASE compartidos por el buscador del
-   header (Parte 3) y el del popup (Parte 4) — acá va todo lo que es
-   igual en los dos (colores, tipografía, la fila input+flecha, el
-   dropdown de sugerencias, el mensaje de error). Cada wrapper le
-   agrega ENCIMA sus propias clases para el tamaño/posición/apertura
-   (eso vive en hero.css y popup.css respectivamente).
+   Buscador de ítems
    ========================================================= */
 
 .campo-busqueda {

@@ -1,8 +1,5 @@
 /* =========================================================
    MINENCHANTS · estilos globales
-   Este archivo ya no tiene el CSS completo: solo importa cada
-   módulo temático, así cada sección de la página vive en su
-   propio archivo dentro de ./styles/
    ========================================================= */
 
 @import "./styles/fonts.css";

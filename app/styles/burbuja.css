@@ -73,11 +73,6 @@
     padding: 8px;
   }
 
-  /* Idioma/Música: en vez de quedar centradas verticalmente contra el
-     botón, se suben para que la parte de ABAJO del recuadro quede
-     alineada con la parte de abajo del botoncito. Como no hay "top"
-     fijo, el recuadro crece hacia arriba solo según su contenido
-     (por eso al agregar más idiomas se va a ajustar el tamaño solo). */
   .burbuja--izquierda,
   .burbuja--derecha {
     top: auto;
@@ -85,18 +80,6 @@
     transform: none;
   }
 
-  /* Opciones/Contacto: en vez de abrir "abajo" (ancho completo), se
-     abren de costado (Opciones a la izquierda, Contacto a la derecha)
-     con un alto fijo para calzar con los 3 botones largos de arriba.
-     ▼▼▼ ACÁ SE AJUSTAN LOS VALORES ▼▼▼
-     --burbuja-lateral-alto   → alto del recuadro (probá hasta que
-                                 quede igual al alto de los 3 botones
-                                 largos + los gaps entre ellos).
-     --burbuja-lateral-arriba → cuánto sube el recuadro desde la fila
-                                 de botones (número negativo = hacia
-                                 arriba) para que el borde de ARRIBA
-                                 del recuadro quede a la altura del
-                                 borde de arriba de "Encantar!". */
   .grupo-central {
     --burbuja-lateral-alto: 170px;
     --burbuja-lateral-arriba: -140px;

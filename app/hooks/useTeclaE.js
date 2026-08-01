@@ -13,15 +13,7 @@ function seccion2EstaALaVista() {
   return rect.top <= centroVentana && rect.bottom >= centroVentana;
 }
 
-/**
- * Maneja la tecla "E" para abrir/cerrar el popup (igual que en
- * Minecraft), y si ya se mostró el aviso de "Presioná E" al menos
- * una vez en esta carga de la página (para no volver a mostrarlo
- * hasta que se recargue la web entera).
- *
- * Abrir con "E" solo funciona parado en la Sección 2 (el HUD); cerrar
- * con "E" funciona siempre que el popup ya esté abierto.
- */
+/*Maneja la tecla "E" para abrir/cerrar el popup*/
 export function useTeclaE({ popupAbierto, abrirPopup, cerrarPopup }) {
   const [avisoVisto, setAvisoVisto] = useState(false);
 
@@ -39,8 +31,7 @@ export function useTeclaE({ popupAbierto, abrirPopup, cerrarPopup }) {
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [popupAbierto, abrirPopup, cerrarPopup]);
 
-  // Si el popup se abre por cualquier otra vía (clic en un ítem del
-  // HUD), también damos por "visto" el aviso.
+  // Si el popup se abre por cualquier otra vía (clic en un ítem del HUD), también damos por "visto" el aviso.
   useEffect(() => {
     if (popupAbierto) setAvisoVisto(true);
   }, [popupAbierto]);

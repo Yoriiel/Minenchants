@@ -3,16 +3,6 @@
 import { useIdioma } from "../context/IdiomaContext";
 import { tituloSegunIdioma } from "../utils/buscarItems";
 
-/**
- * Pieza visual "de adentro" del buscador: el input + botón de flecha
- * + lista de sugerencias + mensaje de error. No sabe nada de cómo se
- * abre/cierra por afuera (eso lo maneja cada wrapper: el del header
- * en la Parte 3, el del popup en la Parte 4) — solo necesita que le
- * pasen el estado del hook `useBuscadorAutocompletado` y listo.
- *
- * `className` permite que cada wrapper le agregue sus propias clases
- * (para diferenciarlos visualmente sin duplicar el componente).
- */
 export default function CampoBusqueda({
   consulta,
   sugerencias,

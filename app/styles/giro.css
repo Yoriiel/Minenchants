@@ -1,8 +1,5 @@
 /* =========================================================
-   Aviso "girá tu teléfono": tapa el popup en celulares en
-   vertical, porque la mesa de encantamientos es muy ancha para
-   ese modo. z-index por encima del popup (100) y del fantasma
-   de arrastre (200).
+   Aviso "gira tu teléfono"
    ========================================================= */
 
 .giro-fondo {

@@ -4,13 +4,7 @@ import { useEffect, useState } from "react";
 
 import { useBloqueoScroll } from "./useBloqueoScroll";
 
-/**
- * Detecta dispositivos "chicos y táctiles" (celulares) en modo
- * vertical. Se usa para pedirles que giren el teléfono antes de usar
- * el popup: la mesa de encantamientos tiene proporciones muy anchas
- * y en vertical las casillas quedan demasiado chicas para tocarlas
- * bien.
- */
+/*Detecta dispositivos en modo vertical. Se usa para pedirles que giren el teléfono*/
 export function useOrientacionMovil() {
   const [necesitaGirar, setNecesitaGirar] = useState(false);
 
@@ -29,9 +23,7 @@ export function useOrientacionMovil() {
     };
   }, []);
 
-  // Mientras se muestra el aviso de girar el teléfono, bloqueamos el
-  // scroll de la página (solo pasa en móvil, que es cuando este aviso
-  // puede estar activo).
+  // Mientras se muestra el aviso de girar el teléfono, bloqueamos el scroll de la página 
   useBloqueoScroll(necesitaGirar);
 
   return necesitaGirar;

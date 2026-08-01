@@ -21,10 +21,6 @@
   pointer-events: none;
 }
 
-/* Estado de salida (los últimos ~400ms antes de desmontarse del
-   todo): se agrega esta clase desde JS, ver DURACION_SALIDA_MS en
-   DiamanteEncontradoToast.js — tiene que coincidir con el tiempo de
-   la transición de acá arriba. */
 .diamante-toast-saliendo {
   opacity: 0;
   transform: translateX(-50%) translateY(-16px);
@@ -56,8 +52,7 @@
 }
 
 /* ---- MÓVIL VERTICAL ----
-   AJUSTAR ACÁ: separación del borde superior, tamaño del ícono y de
-   la letra si en celular queda muy grande. */
+   AJUSTAR ACÁ: separación del borde superior, tamaño del ícono y de la letra si en celular queda muy grande. */
 @media (max-width: 480px) {
   .diamante-toast {
     top: 14px;
