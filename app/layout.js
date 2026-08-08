@@ -2,12 +2,38 @@ import "./globals.css";
 import ProveedorApp from "./components/ProveedorApp";
 
 export const metadata = {
+  metadataBase: new URL("https://minenchants.vercel.app"),
   title: "Minenchants",
   description: "Mejores encantamientos para armas y armaduras",
   keywords: "Encantamientos, Armas, Armaduras, Minecraft, Encantar, Bedrock",
   authors: [{ name: "Yoriiel" }],
   icons: {
     shortcut: "/icon/MesaIcon.png",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+  openGraph: {
+    title: "Minenchants",
+    description: "Mejores encantamientos para armas y armaduras",
+    url: "https://minenchants.vercel.app",
+    siteName: "Minenchants",
+    images: [
+      {
+        url: "/secciones/Hero.png",
+        width: 1200,
+        height: 630,
+      },
+    ],
+    locale: "es_ES",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Minenchants",
+    description: "Mejores encantamientos para armas y armaduras",
+    images: ["/secciones/Hero.png"],
   },
 };
 
